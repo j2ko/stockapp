@@ -1,0 +1,13 @@
+{
+  "id": "YUM",
+  "name": "Yum! Brands, Inc.",
+  "price": 86.94764755999583,
+  "companyType": [
+    "Food",
+    "Tech"
+  ],
+  "allTimeHigh": 105.44,
+  "address": "1441 Gardiner Lane Louisville, KY 40213 United States",
+  "imageUrl": "https://interviews.yum.dev/static/images/yum_logo.png",
+  "website": "https://www.yum.com"
+}
