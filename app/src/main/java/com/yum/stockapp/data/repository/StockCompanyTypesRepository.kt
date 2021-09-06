@@ -1,4 +1,4 @@
-package com.yum.stockapp.data
+package com.yum.stockapp.data.repository
 
 import com.yum.stockapp.data.model.StockCompanyType
 import io.reactivex.rxjava3.core.Single

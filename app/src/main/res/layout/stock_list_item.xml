@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/stockCompanyLogo"
+        android:layout_width="40dp"
+        android:layout_height="0dp"
+        android:paddingRight="5dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="@+id/titleContainer"
+        app:layout_constraintEnd_toStartOf="@id/titleContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/titleContainer"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/titleContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="5dp"
+        app:layout_constraintStart_toEndOf="@id/stockCompanyLogo"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/stockId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="hello world" />
+
+        <TextView
+            android:id="@+id/stockCompanyName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            tools:text="Some company name" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <FrameLayout
+        android:id="@+id/separator"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toStartOf="@id/stockCompanyChangeIndicatorContainer"
+        app:layout_constraintStart_toEndOf="@id/titleContainer"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_default="spread" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/stockCompanyChangeIndicatorContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:padding="5dp"
+        app:layout_constraintBottom_toBottomOf="@id/stockCompanyPrice"
+        app:layout_constraintEnd_toStartOf="@id/stockCompanyPrice"
+        app:layout_constraintStart_toEndOf="@id/separator"
+        app:layout_constraintTop_toTopOf="@id/stockCompanyPrice">
+
+        <ImageView
+            android:id="@+id/stockCompanyChangeIndicator"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            tools:srcCompat="@drawable/stock_change_arrow_up" />
+
+        <TextView
+            android:id="@+id/stockCompanyChangeValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+
+            android:textSize="8sp"
+            tools:text="- 0.24%" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <TextView
+        android:id="@+id/stockCompanyPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:padding="2dp"
+        android:textAllCaps="true"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/titleContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/stockCompanyChangeIndicatorContainer"
+        app:layout_constraintTop_toTopOf="@+id/titleContainer"
+        app:layout_constraintWidth_default="spread"
+        tools:text="40.333"></TextView>
+</androidx.constraintlayout.widget.ConstraintLayout>

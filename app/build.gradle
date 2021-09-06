@@ -70,6 +70,7 @@ dependencies {
     implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
 
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0'
+    implementation 'androidx.lifecycle:lifecycle-reactivestreams-ktx:2.3.0'
 
 
     testImplementation 'junit:junit:4.13.2'
