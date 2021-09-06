@@ -9,6 +9,10 @@ import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.Observables
+import io.reactivex.rxkotlin.concatAll
+import io.reactivex.rxkotlin.merge
+import io.reactivex.rxkotlin.mergeAll
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
 import java.net.URL
@@ -38,24 +42,31 @@ class StockInfoDaoImpl constructor(val api: StockTickerAPI): StockInfoDao {
 
     private var flowable : Flowable<List<StockInfo>> = api.observeStockChange()
         .subscribeOn(Schedulers.io())
-        .flatMapIterable { it }
-        .map {
-            Observable.zip(
-                Observable.just(it),
-                Observable.fromCallable{
-                    getStockDiff(it.id)
-                },
-                Observable.fromCallable{
-                    getDetails(it.id)
-                },
-                {entry, priceChange, details -> createStockInfo(entry, priceChange, details)},
-            )
-        }.flatMap {
-            it.toFlowable(BackpressureStrategy.MISSING)
+        .flatMap {
+            Observable
+                .just(it)
+                .flatMapIterable { it }
+                .map {
+                    Observable.zip(
+                        Observable.just(it),
+                        Observable.fromCallable {
+                            getStockDiff(it.id)
+                        },
+                        Observable.fromCallable {
+                            getDetails(it.id)
+                        },
+                        { entry, priceChange, details ->
+                            createStockInfo(
+                                entry,
+                                priceChange,
+                                details
+                            )
+                        }
+                    )
+                }.flatMap { it }.reduce(mutableListOf<StockInfo>(), { acc, item ->
+                    acc.apply { acc.add(item) }
+                }).toFlowable()
         }
-        .toList()
-        .toFlowable()
-        .observeOn(AndroidSchedulers.mainThread())
 
     private var logger = api.observeWebSocketEvent().observeOn(AndroidSchedulers.mainThread()).subscribe({
         Log.e("TAG", it.toString())
