@@ -1,12 +1,13 @@
 package com.yum.stockapp.data.repository
 
+import com.yum.stockapp.data.dao.StockInfoDao
 import com.yum.stockapp.data.model.StockInfo
-import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.Flowable
 import javax.inject.Inject
 
-class StockInfoRepositoryImpl @Inject constructor(): StockInfoRepository {
+class StockInfoRepositoryImpl @Inject constructor(val dao: StockInfoDao): StockInfoRepository {
     override fun getStockInfoList(): Flowable<List<StockInfo>> {
-        TODO("Not yet implemented")
+        return dao.getStockInfo()
     }
 
     override fun getStockInfo(id: String): Flowable<StockInfo> {

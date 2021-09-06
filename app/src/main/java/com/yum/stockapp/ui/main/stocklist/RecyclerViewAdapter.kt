@@ -1,6 +1,5 @@
 package com.yum.stockapp.ui.main.stocklist
 
-import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,10 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.yum.stockapp.R
 import com.yum.stockapp.data.model.StockInfo
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Flowable
-import io.reactivex.rxjava3.core.Scheduler
-import io.reactivex.rxjava3.schedulers.Schedulers
+import com.yum.stockapp.ui.main.MainViewModel
 import java.text.NumberFormat
 import java.util.*
 
@@ -40,16 +36,12 @@ class RecyclerViewViewHolder(v : View): RecyclerView.ViewHolder(v) {
     }
 }
 
-class RecyclerViewAdapter constructor(private val stockInfoSource: Flowable<List<StockInfo>>): RecyclerView.Adapter<RecyclerViewViewHolder>() {
+class RecyclerViewAdapter constructor(private val viewModel: MainViewModel): RecyclerView.Adapter<RecyclerViewViewHolder>() {
     var stockInfoList : List<StockInfo> = Collections.emptyList()
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        stockInfoSource.subscribeOn(Schedulers.io())
-            .subscribeOn(AndroidSchedulers.mainThread())
-            .subscribe({
+            viewModel.getStockInfo().observe(viewModel.activity, {
                 stockInfoList = it
                 notifyDataSetChanged()
-            },{
-                TODO("Implement error handling")
             })
     }
 

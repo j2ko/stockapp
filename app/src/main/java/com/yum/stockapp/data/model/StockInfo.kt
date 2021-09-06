@@ -1,6 +1,5 @@
 package com.yum.stockapp.data.model
 
-import io.reactivex.rxjava3.core.Maybe
 import java.util.*
 
 

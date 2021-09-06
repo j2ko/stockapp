@@ -1,12 +1,15 @@
 package com.yum.stockapp.di.module
 
+import android.app.Application
+import android.util.Log
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.tinder.scarlet.MessageAdapter
-import com.tinder.scarlet.Scarlet
-import com.tinder.scarlet.WebSocket
+import com.tinder.scarlet.*
+import com.tinder.scarlet.lifecycle.android.AndroidLifecycle
 import com.tinder.scarlet.messageadapter.moshi.MoshiMessageAdapter
+import com.tinder.scarlet.streamadapter.rxjava2.RxJava2StreamAdapterFactory
 import com.tinder.scarlet.websocket.okhttp.newWebSocketFactory
+import com.tinder.scarlet.websocket.okhttp.request.RequestFactory
 import com.yum.stockapp.BuildConfig
 import com.yum.stockapp.data.api.adapters.StockCompanyTypeAdapter
 import com.yum.stockapp.data.api.adapters.StockPriceAdapter
@@ -19,22 +22,28 @@ import dagger.Reusable
 import okhttp3.OkHttpClient
 import retrofit2.Converter
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.lang.reflect.Type
+import javax.inject.Singleton
 
 @Module
 class APIModule {
     @Provides
-    @Reusable
+    @Singleton
     fun providesStockDetailsAPI(retrofit: Retrofit): StockDetailsAPI = retrofit.create(StockDetailsAPI::class.java)
 
 
     @Provides
-    @Reusable
+    @Singleton
     fun providesStockTickerWebSocket(scarlet: Scarlet) = scarlet.create<StockTickerAPI>()
 
     @Provides
-    @Reusable
+    @Singleton
+    fun provideWebSocketLifecycle(application : Application): Lifecycle = AndroidLifecycle.ofApplicationForeground(application)
+
+    @Provides
+    @Singleton
     fun providesMoshi() : Moshi {
         return Moshi.Builder()
             .add(URLAdapter())
@@ -45,40 +54,49 @@ class APIModule {
     }
 
     @Provides
-    @Reusable
+    @Singleton
     fun providesRetrofitInterface(client : OkHttpClient, converterFactory: Converter.Factory): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_REST_API_URL)
             .client(client)
             .addConverterFactory(converterFactory)
-            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
     }
 
     @Provides
-    @Reusable
+    @Singleton
     fun providesConverterFactory(moshi: Moshi) : Converter.Factory {
         return MoshiConverterFactory.create(moshi)
     }
 
     @Provides
-    @Reusable
-    fun providesScarletInterface(websocketFactory: WebSocket.Factory, messageAdapter: MessageAdapter.Factory): Scarlet {
+    @Singleton
+    fun providesScarletInterface(websocketFactory: WebSocket.Factory, messageAdapter: MessageAdapter.Factory, streamAdapter: StreamAdapter.Factory): Scarlet {
         return Scarlet.Builder()
             .webSocketFactory(websocketFactory)
             .addMessageAdapterFactory(messageAdapter)
+            .addStreamAdapterFactory(streamAdapter)
             .build()
     }
 
     @Provides
-    @Reusable
+    @Singleton
     fun providesOkHttpClient() = OkHttpClient.Builder().build()
 
     @Provides
-    @Reusable
+    @Singleton
     fun provideWebSocketFactory(okHttpClient: OkHttpClient) = okHttpClient.newWebSocketFactory(BuildConfig.STOCKS_WS_URL)
 
     @Provides
-    @Reusable
-    fun providesMessageAdapterFactory(moshi: Moshi) = MoshiMessageAdapter.Factory(moshi)
+    @Singleton
+    fun provideStreamAdapterFactory(): StreamAdapter.Factory {
+        return RxJava2StreamAdapterFactory()
+    }
+
+    @Provides
+    @Singleton
+    fun providesMessageAdapterFactory(moshi: Moshi) : MessageAdapter.Factory {
+        return MoshiMessageAdapter.Factory(moshi)
+    }
 }

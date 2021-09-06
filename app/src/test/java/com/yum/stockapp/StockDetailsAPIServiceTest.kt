@@ -9,7 +9,7 @@ import com.yum.stockapp.data.api.StockDetailsAPI
 import com.yum.stockapp.data.api.model.StockCompanyType
 import com.yum.stockapp.data.api.model.StockDetailResponse
 import com.yum.stockapp.data.api.model.StockPrice
-import io.reactivex.rxjava3.observers.TestObserver
+import io.reactivex.observers.TestObserver
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -18,7 +18,7 @@ import okio.source
 import org.junit.After
 import org.junit.Test
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.math.BigDecimal
 import java.net.URL
@@ -45,7 +45,7 @@ class StockDetailsAPIServiceTest {
         .baseUrl(mockWebServer.url("/"))
         .client(client)
         .addConverterFactory(MoshiConverterFactory.create(moshi))
-        .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .build()
         .create(StockDetailsAPI::class.java)
 
