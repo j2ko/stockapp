@@ -4,7 +4,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.yum.stockapp.data.api.adapters.StockCompanyTypeAdapter
 import com.yum.stockapp.data.api.adapters.StockPriceAdapter
-import com.yum.stockapp.data.api.adapters.URLAdapter
+import com.yum.stockapp.data.api.adapters.UriAdapter
 import com.yum.stockapp.data.api.StockDetailsAPI
 import com.yum.stockapp.data.api.model.StockCompanyType
 import com.yum.stockapp.data.api.model.StockDetailResponse
@@ -37,7 +37,7 @@ class StockDetailsAPIServiceTest {
     private val moshi = Moshi.Builder()
         .add(StockPriceAdapter())
         .add(StockCompanyTypeAdapter())
-        .add(URLAdapter())
+        .add(UriAdapter())
         .add(KotlinJsonAdapterFactory())
         .build()
 

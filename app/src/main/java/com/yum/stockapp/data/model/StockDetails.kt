@@ -1,10 +1,10 @@
 package com.yum.stockapp.data.model
 
-import java.net.URL
+import android.net.Uri
 
 data class StockDetails (
     val allTimeHigh : StockPrice,
     val address: String,
-    val imageUrl: URL,
-    val website: URL
+    val imageUrl: Uri,
+    val website: Uri
 )

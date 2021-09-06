@@ -1,13 +1,12 @@
 package com.yum.stockapp.data.dao
 
 import android.util.Log
+import com.yum.stockapp.data.api.StockDetailsAPI
 import com.yum.stockapp.data.api.StockTickerAPI
 import com.yum.stockapp.data.api.model.StockTickerEntry
 import com.yum.stockapp.data.model.*
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
+import io.reactivex.*
 import io.reactivex.Observable
-import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.concatAll
@@ -18,15 +17,15 @@ import java.math.BigDecimal
 import java.net.URL
 import java.util.*
 
-class StockInfoDaoImpl constructor(val api: StockTickerAPI): StockInfoDao {
+class StockInfoDaoImpl constructor(val api: StockTickerAPI, val detailsApi: StockDetailsAPI): StockInfoDao {
     private fun getStockDiff(id: String): StockPriceDiff {
         return StockPriceDiff(BigDecimal("1.0"))
     }
 
-    private fun getDetails(id: String): Optional<StockDetails> {
-        return Optional.of(StockDetails(StockPrice(BigDecimal("100")), "Somewhere streeet",
-            URL("https://interviews.yum.dev/static/images/yum_logo.png"),
-            URL("https://www.yum.com")))
+    private fun getDetails(id: String): Observable<Optional<StockDetails>> {
+        return detailsApi.getStockDetail(id).map {
+            Optional.of(StockDetails(StockPrice(it.allTimeHigh.value), it.address, it.imageUrl, it.website))
+        }.toObservable()
     }
 
     private fun createStockInfo(entry: StockTickerEntry, priceChange : StockPriceDiff, details: Optional<StockDetails>) : StockInfo {
@@ -52,9 +51,7 @@ class StockInfoDaoImpl constructor(val api: StockTickerAPI): StockInfoDao {
                         Observable.fromCallable {
                             getStockDiff(it.id)
                         },
-                        Observable.fromCallable {
-                            getDetails(it.id)
-                        },
+                        getDetails(it.id),
                         { entry, priceChange, details ->
                             createStockInfo(
                                 entry,

@@ -1,7 +1,6 @@
 package com.yum.stockapp.di.module
 
 import android.app.Application
-import android.util.Log
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.tinder.scarlet.*
@@ -9,22 +8,19 @@ import com.tinder.scarlet.lifecycle.android.AndroidLifecycle
 import com.tinder.scarlet.messageadapter.moshi.MoshiMessageAdapter
 import com.tinder.scarlet.streamadapter.rxjava2.RxJava2StreamAdapterFactory
 import com.tinder.scarlet.websocket.okhttp.newWebSocketFactory
-import com.tinder.scarlet.websocket.okhttp.request.RequestFactory
 import com.yum.stockapp.BuildConfig
 import com.yum.stockapp.data.api.adapters.StockCompanyTypeAdapter
 import com.yum.stockapp.data.api.adapters.StockPriceAdapter
-import com.yum.stockapp.data.api.adapters.URLAdapter
+import com.yum.stockapp.data.api.adapters.UriAdapter
 import com.yum.stockapp.data.api.StockDetailsAPI
 import com.yum.stockapp.data.api.StockTickerAPI
 import dagger.Module
 import dagger.Provides
-import dagger.Reusable
 import okhttp3.OkHttpClient
 import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
-import java.lang.reflect.Type
 import javax.inject.Singleton
 
 @Module
@@ -46,7 +42,7 @@ class APIModule {
     @Singleton
     fun providesMoshi() : Moshi {
         return Moshi.Builder()
-            .add(URLAdapter())
+            .add(UriAdapter())
             .add(StockPriceAdapter())
             .add(StockCompanyTypeAdapter())
             .add(KotlinJsonAdapterFactory())

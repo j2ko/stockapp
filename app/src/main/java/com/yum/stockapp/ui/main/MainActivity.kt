@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.yum.stockapp.R
 import com.yum.stockapp.ui.main.stocklist.RecyclerViewAdapter
 import dagger.android.AndroidInjection
@@ -30,7 +31,7 @@ class MainActivity : DaggerAppCompatActivity() {
 
         Log.e("TAG", test)
         recyclerView = findViewById(R.id.stockList)
-        recyclerView.adapter = RecyclerViewAdapter(mainViewModel)
+        recyclerView.adapter = RecyclerViewAdapter(mainViewModel, Glide.with(this))
         recyclerView.layoutManager = LinearLayoutManager(this)
     }
 

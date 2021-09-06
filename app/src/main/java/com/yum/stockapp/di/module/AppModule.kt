@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import com.yum.stockapp.data.api.StockDetailsAPI
 import com.yum.stockapp.data.api.StockTickerAPI
 import com.yum.stockapp.data.dao.StockInfoDao
 import com.yum.stockapp.data.dao.StockInfoDaoImpl
@@ -30,8 +31,8 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideStockInfoDao(api: StockTickerAPI): StockInfoDao {
-        return StockInfoDaoImpl(api)
+    fun provideStockInfoDao(api: StockTickerAPI, detailsApi: StockDetailsAPI): StockInfoDao {
+        return StockInfoDaoImpl(api, detailsApi)
     }
 
     @Provides
