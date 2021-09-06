@@ -1,4 +1,4 @@
-package com.yum.stockapp.data
+package com.yum.stockapp.data.api.adapters
 
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.ToJson

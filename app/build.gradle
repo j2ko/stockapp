@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -12,6 +13,10 @@ android {
         targetSdk 30
         versionCode 1
         versionName "1.0"
+
+        buildConfigField "String", "BASE_REST_API_URL", "\"https://interviews.yum.dev/api/\""
+        buildConfigField "String", "STOCKS_WS_URL", "\"wss://interviews.yum.dev/ws/stocks\""
+
 
         testApplicationId = "com.yum.stockapp"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -47,8 +52,15 @@ dependencies {
 
     // WebSocket support
     implementation 'com.tinder.scarlet:scarlet:0.1.12'
+    implementation 'com.tinder.scarlet:websocket-okhttp:0.1.12'
+    implementation 'com.tinder.scarlet:message-adapter-moshi:0.1.12'
 
     // Dependency Injection support
+    implementation 'com.google.dagger:dagger:2.23.2'
+    implementation 'com.google.dagger:dagger-android-support:2.22.1'
+    kapt "com.google.dagger:dagger-compiler:2.22.1"
+    kapt "com.google.dagger:dagger-android-processor:2.22.1"
+    kaptTest 'com.google.dagger:dagger-compiler:2.22.1'
 
 
     // Image loading/caching support
@@ -56,6 +68,8 @@ dependencies {
     // Reactive support
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
     implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
+
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0'
 
 
     testImplementation 'junit:junit:4.13.2'

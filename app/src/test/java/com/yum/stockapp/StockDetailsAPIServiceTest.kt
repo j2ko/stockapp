@@ -1,29 +1,22 @@
 package com.yum.stockapp
 
 import com.squareup.moshi.Moshi
-import com.yum.stockapp.data.CompanyTypeAdapter
-import com.yum.stockapp.data.StockPriceAdapter
-import com.yum.stockapp.data.URLAdapter
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.yum.stockapp.data.api.adapters.StockCompanyTypeAdapter
+import com.yum.stockapp.data.api.adapters.StockPriceAdapter
+import com.yum.stockapp.data.api.adapters.URLAdapter
 import com.yum.stockapp.data.api.StockDetailsAPI
-import com.yum.stockapp.data.model.CompanyType
-import com.yum.stockapp.data.model.StockDetailResponse
-import com.yum.stockapp.data.model.StockPrice
-import io.reactivex.rxjava3.android.plugins.RxAndroidPlugins
-import io.reactivex.rxjava3.functions.Consumer
+import com.yum.stockapp.data.api.model.StockCompanyType
+import com.yum.stockapp.data.api.model.StockDetailResponse
+import com.yum.stockapp.data.api.model.StockPrice
 import io.reactivex.rxjava3.observers.TestObserver
-import io.reactivex.rxjava3.plugins.RxJavaPlugins
-import io.reactivex.rxjava3.schedulers.TestScheduler
 import okhttp3.OkHttpClient
-import okhttp3.internal.wait
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okio.buffer
 import okio.source
 import org.junit.After
-import org.junit.Assert.assertTrue
-import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito.mock
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -42,9 +35,10 @@ class StockDetailsAPIServiceTest {
         .build()
 
     private val moshi = Moshi.Builder()
-        .add(CompanyTypeAdapter())
         .add(StockPriceAdapter())
+        .add(StockCompanyTypeAdapter())
         .add(URLAdapter())
+        .add(KotlinJsonAdapterFactory())
         .build()
 
     private val api = Retrofit.Builder()
@@ -72,7 +66,7 @@ class StockDetailsAPIServiceTest {
             "YUM",
             "Yum! Brands, Inc.",
             StockPrice(BigDecimal("86.94764755999583")),
-            listOf(CompanyType("Food"), CompanyType("Tech")),
+            setOf(StockCompanyType("Food"), StockCompanyType("Tech")),
             StockPrice(BigDecimal("105.44")),
             "1441 Gardiner Lane Louisville, KY 40213 United States",
             URL("https://interviews.yum.dev/static/images/yum_logo.png"),

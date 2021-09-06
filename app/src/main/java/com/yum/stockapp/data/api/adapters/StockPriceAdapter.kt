@@ -1,8 +1,8 @@
-package com.yum.stockapp.data
+package com.yum.stockapp.data.api.adapters
 
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.ToJson
-import com.yum.stockapp.data.model.StockPrice
+import com.yum.stockapp.data.api.model.StockPrice
 import java.math.BigDecimal
 
 class StockPriceAdapter {

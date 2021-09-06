@@ -1,5 +1,5 @@
 package com.yum.stockapp.data.model
 
-data class CompanyType(
+data class StockCompanyType(
     val name: String
 )
