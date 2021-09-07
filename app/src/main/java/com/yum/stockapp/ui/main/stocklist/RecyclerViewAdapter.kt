@@ -25,7 +25,7 @@ class RecyclerViewViewHolder(v : View, private val glide : RequestManager): Recy
     private var stockCompanyChangeIndicator : ImageView? = v.findViewById(R.id.stockCompanyChangeIndicator)
     private var stockCompanyChangeValue : TextView? = v.findViewById(R.id.stockCompanyChangeValue)
     private var numberFormatter : NumberFormat = DecimalFormat("00000.000¤").also { it.currency = Currency.getInstance("USD") }
-    private var percentageFormatter : NumberFormat = DecimalFormat("#00.0000%")
+    private var percentageFormatter : NumberFormat = DecimalFormat("+#00.0000%;-#00.0000%")
 
     fun bind(info: StockInfo) {
         itemView.setOnClickListener{

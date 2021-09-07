@@ -20,10 +20,9 @@ data class StockPriceDiff (
     companion object {
         fun percents(left: StockPrice, right: StockPrice) : StockPriceDiff {
             return StockPriceDiff(
-                left.value
-                    .subtract(right.value)
-                    .multiply(BigDecimal.valueOf(100), MathContext(6, RoundingMode.HALF_UP))
-                    .divide(left.value, 6, RoundingMode.HALF_UP)
+                right.value
+                    .subtract(left.value)
+                    .divide(right.value, 6, RoundingMode.HALF_UP)
             )
         }
     }
