@@ -3,10 +3,13 @@ package com.yum.stockapp.ui.main
 import android.app.Activity
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.yum.stockapp.R
 import com.yum.stockapp.ui.main.stocklist.RecyclerViewAdapter
 import dagger.android.AndroidInjection
@@ -19,20 +22,27 @@ class MainActivity : DaggerAppCompatActivity() {
     private lateinit var recyclerView : RecyclerView
 
     @Inject
-    lateinit var test: String
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    @Inject
-    lateinit var mainViewModel: MainViewModel
+    private val mainViewModel: MainViewModel by viewModels {
+        viewModelFactory
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
 
-        Log.e("TAG", test)
         recyclerView = findViewById(R.id.stockList)
-        recyclerView.adapter = RecyclerViewAdapter(mainViewModel, Glide.with(this))
+        // TODO: Move Glide to inject
+        var adapter = RecyclerViewAdapter(Glide.with(this))
+        recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
+
+        mainViewModel.getStockInfo().observe(this, {
+            adapter.stockInfoList = it
+            adapter.notifyDataSetChanged()
+        })
     }
 
     override fun onResume() {

@@ -50,18 +50,8 @@ class RecyclerViewViewHolder(v : View, private val glide : RequestManager): Recy
     }
 }
 
-class RecyclerViewAdapter constructor(private val viewModel: MainViewModel, private val glide: RequestManager): RecyclerView.Adapter<RecyclerViewViewHolder>() {
+class RecyclerViewAdapter constructor(private val glide: RequestManager): RecyclerView.Adapter<RecyclerViewViewHolder>() {
     var stockInfoList : List<StockInfo> = Collections.emptyList()
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-            viewModel.getStockInfo().observe(viewModel.activity, {
-                stockInfoList = it
-                notifyDataSetChanged()
-            })
-    }
-
-    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView)
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewViewHolder {
         var itemView = LayoutInflater.from(parent.context).inflate(R.layout.stock_list_item, parent, false)

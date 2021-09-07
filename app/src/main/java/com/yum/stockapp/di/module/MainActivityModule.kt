@@ -1,6 +1,8 @@
 package com.yum.stockapp.di.module
 
 import android.content.SharedPreferences
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.yum.stockapp.data.api.StockTickerAPI
 import com.yum.stockapp.data.dao.StockInfoDao
 import com.yum.stockapp.data.dao.StockInfoDaoImpl
@@ -13,13 +15,8 @@ import dagger.Provides
 @Module
 class MainActivityModule {
     @Provides
-    fun provideMessageString(): String {
-        return "Hello world"
-    }
-
-    @Provides
-    fun provideMainViewModel(activity: MainActivity, repo: StockInfoRepository, filterRepo: FilterRepository): MainViewModel {
-        return MainViewModel(activity, repo, filterRepo)
+    fun provideMainViewModel(repo: StockInfoRepository, filterRepo: FilterRepository): MainViewModel {
+        return MainViewModel(repo, filterRepo)
     }
 
     @Provides

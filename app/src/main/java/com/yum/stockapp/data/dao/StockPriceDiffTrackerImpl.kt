@@ -6,6 +6,7 @@ import io.reactivex.Observable
 
 class StockPriceDiffTrackerImpl: StockPriceDiffTracker {
     val cache = mutableMapOf<String, StockPrice>()
+
     override fun getDiff(id: String, currentValue: StockPrice): Observable<StockPriceDiff> {
         val oldPrice = cache.getOrDefault(id, currentValue)
         cache.put(id, currentValue)

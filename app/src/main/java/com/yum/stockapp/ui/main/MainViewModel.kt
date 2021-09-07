@@ -10,7 +10,7 @@ import com.yum.stockapp.ui.base.BaseViewModel
 import io.reactivex.Observable
 import javax.inject.Inject
 
-class MainViewModel constructor(val activity: MainActivity, val infoRepo: StockInfoRepository, val filterRepo: FilterRepository): BaseViewModel<MainNavigator>() {
+class MainViewModel @Inject constructor(val infoRepo: StockInfoRepository, val filterRepo: FilterRepository): BaseViewModel<MainNavigator>() {
     fun getStockInfo(): LiveData<List<StockInfo>> = infoRepo.getStockInfoList().toLiveData()
     fun getFilter(): LiveData<StockFilter> = filterRepo.getFilter().toLiveData()
     fun setFilter(name: String, companyTypes: Set<StockCompanyType>) = filterRepo.setFilter(StockFilter(name, companyTypes))
