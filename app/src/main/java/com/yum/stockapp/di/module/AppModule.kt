@@ -47,7 +47,7 @@ class AppModule {
 
     @Provides
     fun providesStockDetailsCache(): Cache<StockDetails> {
-        return TimeBasedCache<StockDetails>(12, TimeUnit.SECONDS)
+        return TimeBasedCache<StockDetails>(5, TimeUnit.MINUTES)
     }
 
     @Provides

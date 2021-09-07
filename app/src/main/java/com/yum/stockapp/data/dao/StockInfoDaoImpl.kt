@@ -7,10 +7,15 @@ import com.yum.stockapp.data.api.model.StockTickerEntry
 import com.yum.stockapp.data.model.*
 import com.yum.stockapp.utils.Cache
 import com.yum.stockapp.utils.SingleItemCache
+import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.processors.AsyncProcessor
+import io.reactivex.processors.BehaviorProcessor
+import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.AsyncSubject
 import java.util.*
 
 class StockInfoDaoImpl constructor(val cache: Cache<StockDetails>, val api: StockTickerAPI, val detailsApi: StockDetailsAPI, val stockPriceDiff: StockPriceDiffTracker): StockInfoDao {
@@ -32,7 +37,9 @@ class StockInfoDaoImpl constructor(val cache: Cache<StockDetails>, val api: Stoc
         return Observable.concat(detailsCache, detailsNetwork).firstOrError().map { it }.toObservable()
     }
 
-    private var flowable : Flowable<List<StockInfo>> = api.observeStockChange()
+    private var centrallistener = BehaviorProcessor.create<List<StockInfo>>()
+
+    private var serverlistener = api.observeStockChange()
         .subscribeOn(Schedulers.io())
         .flatMap {
             Observable
@@ -57,10 +64,12 @@ class StockInfoDaoImpl constructor(val cache: Cache<StockDetails>, val api: Stoc
                     acc.apply { acc.add(item) }
                 }).toFlowable()
         }
-
+        .subscribe(centrallistener)
 
     override fun getStockInfo() : Flowable<List<StockInfo>> {
-        return flowable
+        return centrallistener.subscribeOn(Schedulers.io()).doOnNext({
+            Log.e("TAG", "So we are still emitting")
+        })
     }
 
    fun createStockInfo(entry: StockTickerEntry, priceChange : StockPriceDiff, details: Optional<StockDetails>) : StockInfo {

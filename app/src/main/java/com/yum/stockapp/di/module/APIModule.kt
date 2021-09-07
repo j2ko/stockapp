@@ -68,11 +68,12 @@ class APIModule {
 
     @Provides
     @Singleton
-    fun providesScarletInterface(websocketFactory: WebSocket.Factory, messageAdapter: MessageAdapter.Factory, streamAdapter: StreamAdapter.Factory): Scarlet {
+    fun providesScarletInterface(livecycle: Lifecycle, websocketFactory: WebSocket.Factory, messageAdapter: MessageAdapter.Factory, streamAdapter: StreamAdapter.Factory): Scarlet {
         return Scarlet.Builder()
             .webSocketFactory(websocketFactory)
             .addMessageAdapterFactory(messageAdapter)
             .addStreamAdapterFactory(streamAdapter)
+            .lifecycle(livecycle)
             .build()
     }
 
