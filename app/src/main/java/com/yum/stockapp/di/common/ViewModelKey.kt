@@ -1,4 +1,4 @@
-package com.yum.stockapp.di
+package com.yum.stockapp.di.common
 
 import androidx.lifecycle.ViewModel
 import dagger.MapKey

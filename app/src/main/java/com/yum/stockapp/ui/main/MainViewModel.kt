@@ -7,6 +7,7 @@ import com.yum.stockapp.data.model.StockInfo
 import com.yum.stockapp.data.repository.FilterRepository
 import com.yum.stockapp.data.repository.StockInfoRepository
 import com.yum.stockapp.ui.base.BaseViewModel
+import com.yum.stockapp.utils.toLiveData
 import io.reactivex.Observable
 import javax.inject.Inject
 
@@ -16,13 +17,4 @@ class MainViewModel @Inject constructor(val infoRepo: StockInfoRepository, val f
     fun setFilter(name: String, companyTypes: Set<StockCompanyType>) = filterRepo.setFilter(StockFilter(name, companyTypes))
 }
 
-fun <T> Observable<T>.toLiveData() : LiveData<T> =
-    MutableLiveData<T>().apply {
-        this@toLiveData.subscribe {
-            value = it
-        }
-    }
 
-fun <T> LiveData<T>.observe(owner: LifecycleOwner, f: (T) -> Unit) =
-    observe(owner, Observer<T> {
-        f(it) })
