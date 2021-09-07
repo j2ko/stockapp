@@ -17,12 +17,12 @@ import java.math.BigDecimal
 import java.net.URL
 import java.util.*
 
-class StockInfoDaoImpl constructor(val api: StockTickerAPI, val detailsApi: StockDetailsAPI): StockInfoDao {
-    private fun getStockDiff(id: String): StockPriceDiff {
-        return StockPriceDiff(BigDecimal("1.0"))
+class StockInfoDaoImpl constructor(val api: StockTickerAPI, val detailsApi: StockDetailsAPI, val stockPriceDiff: StockPriceDiffTracker): StockInfoDao {
+    private fun getStockDiff(id: String, currentPrice: StockPrice): Observable<StockPriceDiff> {
+        return stockPriceDiff.getDiff(id, currentPrice)
     }
 
-    private fun getDetails(id: String): Observable<Optional<StockDetails>> {
+    private fun getStockDetails(id: String): Observable<Optional<StockDetails>> {
         return detailsApi.getStockDetail(id).map {
             Optional.of(StockDetails(StockPrice(it.allTimeHigh.value), it.address, it.imageUrl, it.website))
         }.toObservable()
@@ -48,10 +48,8 @@ class StockInfoDaoImpl constructor(val api: StockTickerAPI, val detailsApi: Stoc
                 .map {
                     Observable.zip(
                         Observable.just(it),
-                        Observable.fromCallable {
-                            getStockDiff(it.id)
-                        },
-                        getDetails(it.id),
+                        getStockDiff(it.id, StockPrice(it.price.value)),
+                        getStockDetails(it.id),
                         { entry, priceChange, details ->
                             createStockInfo(
                                 entry,

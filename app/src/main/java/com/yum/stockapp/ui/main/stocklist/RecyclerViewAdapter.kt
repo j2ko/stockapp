@@ -13,6 +13,7 @@ import com.yum.stockapp.R
 import com.yum.stockapp.data.model.StockDetails
 import com.yum.stockapp.data.model.StockInfo
 import com.yum.stockapp.ui.main.MainViewModel
+import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.*
 
@@ -23,8 +24,8 @@ class RecyclerViewViewHolder(v : View, private val glide : RequestManager): Recy
     private var stockCompanyPrice : TextView? = v.findViewById(R.id.stockCompanyPrice)
     private var stockCompanyChangeIndicator : ImageView? = v.findViewById(R.id.stockCompanyChangeIndicator)
     private var stockCompanyChangeValue : TextView? = v.findViewById(R.id.stockCompanyChangeValue)
-    private var numberFormatter : NumberFormat = NumberFormat.getInstance(Locale.US)
-    private var percentageFormatter : NumberFormat = NumberFormat.getPercentInstance(Locale.US)
+    private var numberFormatter : NumberFormat = DecimalFormat("00000.000¤").also { it.currency = Currency.getInstance("USD") }
+    private var percentageFormatter : NumberFormat = DecimalFormat("#00.0000%")
 
     fun bind(info: StockInfo) {
         itemView.setOnClickListener{

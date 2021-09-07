@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingLeft="5dp"
+        android:paddingLeft="2dp"
         app:layout_constraintStart_toEndOf="@id/stockCompanyLogo"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -56,28 +56,29 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:orientation="vertical"
-        android:padding="5dp"
-        app:layout_constraintBottom_toBottomOf="@id/stockCompanyPrice"
+
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/stockCompanyPrice"
         app:layout_constraintStart_toEndOf="@id/separator"
-        app:layout_constraintTop_toTopOf="@id/stockCompanyPrice">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/stockCompanyChangeIndicator"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="center"
-            android:scaleType="fitCenter"
+            android:layout_width="wrap_content"
+            android:layout_height="18dp"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="fitXY"
             tools:srcCompat="@drawable/stock_change_arrow_up" />
-
         <TextView
+            android:paddingRight="5dp"
             android:id="@+id/stockCompanyChangeValue"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:layout_gravity="center"
-
-            android:textSize="8sp"
-            tools:text="- 0.24%" />
+            android:textAlignment="center"
+            android:textSize="14sp"
+            tools:text="-0.24%" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <TextView

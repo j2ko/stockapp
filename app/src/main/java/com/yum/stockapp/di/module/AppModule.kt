@@ -8,6 +8,9 @@ import com.yum.stockapp.data.api.StockDetailsAPI
 import com.yum.stockapp.data.api.StockTickerAPI
 import com.yum.stockapp.data.dao.StockInfoDao
 import com.yum.stockapp.data.dao.StockInfoDaoImpl
+import com.yum.stockapp.data.dao.StockPriceDiffTracker
+import com.yum.stockapp.data.dao.StockPriceDiffTrackerImpl
+import com.yum.stockapp.data.model.StockPriceDiff
 import com.yum.stockapp.data.repository.StockInfoRepository
 import com.yum.stockapp.data.repository.StockInfoRepositoryImpl
 import dagger.Module
@@ -31,8 +34,14 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideStockInfoDao(api: StockTickerAPI, detailsApi: StockDetailsAPI): StockInfoDao {
-        return StockInfoDaoImpl(api, detailsApi)
+    fun providesStockDiffTracker() : StockPriceDiffTracker {
+        return StockPriceDiffTrackerImpl()
+    }
+
+    @Provides
+    @Singleton
+    fun provideStockInfoDao(api: StockTickerAPI, detailsApi: StockDetailsAPI, diffTraccer: StockPriceDiffTracker): StockInfoDao {
+        return StockInfoDaoImpl(api, detailsApi, diffTraccer)
     }
 
     @Provides
