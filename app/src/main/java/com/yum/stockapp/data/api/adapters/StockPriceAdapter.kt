@@ -1,6 +1,5 @@
 package com.yum.stockapp.data.api.adapters
 
-import android.util.Log
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.ToJson
 import com.yum.stockapp.data.api.model.StockPrice

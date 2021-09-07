@@ -1,7 +1,4 @@
-package com.yum.stockapp.data.dao
-
-import com.yum.stockapp.data.model.StockInfo
-import com.yum.stockapp.data.model.StockPrice
+package com.yum.stockapp.utils
 
 class SingleItemCache<T> : Cache<T> {
     private val internalCache = mutableMapOf<String, T>()

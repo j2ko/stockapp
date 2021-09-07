@@ -1,4 +1,4 @@
-package com.yum.stockapp.data.dao
+package com.yum.stockapp.utils
 
 interface Cache<T> {
     operator fun get(key: String): T?

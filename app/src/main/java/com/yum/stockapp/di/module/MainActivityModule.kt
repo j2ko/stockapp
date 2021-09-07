@@ -7,10 +7,12 @@ import com.yum.stockapp.data.api.StockTickerAPI
 import com.yum.stockapp.data.dao.StockInfoDao
 import com.yum.stockapp.data.dao.StockInfoDaoImpl
 import com.yum.stockapp.data.repository.*
+import com.yum.stockapp.di.scope.ActivityScope
 import com.yum.stockapp.ui.main.MainActivity
 import com.yum.stockapp.ui.main.MainViewModel
 import dagger.Module
 import dagger.Provides
+import javax.inject.Singleton
 
 @Module
 class MainActivityModule {
