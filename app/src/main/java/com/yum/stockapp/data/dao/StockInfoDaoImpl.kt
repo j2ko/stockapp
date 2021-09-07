@@ -5,6 +5,7 @@ import com.yum.stockapp.data.api.StockDetailsAPI
 import com.yum.stockapp.data.api.StockTickerAPI
 import com.yum.stockapp.data.api.model.StockTickerEntry
 import com.yum.stockapp.data.model.*
+import com.yum.stockapp.utils.Cache
 import com.yum.stockapp.utils.SingleItemCache
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -12,9 +13,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 
-class StockInfoDaoImpl constructor(val api: StockTickerAPI, val detailsApi: StockDetailsAPI, val stockPriceDiff: StockPriceDiffTracker): StockInfoDao {
-    private var cache = SingleItemCache<StockDetails>()
-
+class StockInfoDaoImpl constructor(val cache: Cache<StockDetails>, val api: StockTickerAPI, val detailsApi: StockDetailsAPI, val stockPriceDiff: StockPriceDiffTracker): StockInfoDao {
     private fun getStockDiff(id: String, currentPrice: StockPrice): Observable<StockPriceDiff> {
         return stockPriceDiff.getDiff(id, currentPrice)
     }

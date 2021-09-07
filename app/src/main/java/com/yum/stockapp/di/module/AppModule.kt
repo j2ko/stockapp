@@ -7,13 +7,16 @@ import android.content.SharedPreferences
 import com.yum.stockapp.data.api.StockDetailsAPI
 import com.yum.stockapp.data.api.StockTickerAPI
 import com.yum.stockapp.data.dao.*
+import com.yum.stockapp.data.model.StockDetails
 import com.yum.stockapp.data.model.StockPrice
 import com.yum.stockapp.data.repository.StockInfoRepository
 import com.yum.stockapp.data.repository.StockInfoRepositoryImpl
 import com.yum.stockapp.utils.Cache
 import com.yum.stockapp.utils.SingleItemCache
+import com.yum.stockapp.utils.TimeBasedCache
 import dagger.Module
 import dagger.Provides
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -43,9 +46,14 @@ class AppModule {
     }
 
     @Provides
+    fun providesStockDetailsCache(): Cache<StockDetails> {
+        return TimeBasedCache<StockDetails>(12, TimeUnit.SECONDS)
+    }
+
+    @Provides
     @Singleton
-    fun provideStockInfoDao(api: StockTickerAPI, detailsApi: StockDetailsAPI, diffTraccer: StockPriceDiffTracker): StockInfoDao {
-        return StockInfoDaoImpl(api, detailsApi, diffTraccer)
+    fun provideStockInfoDao(cache : Cache<StockDetails>, api: StockTickerAPI, detailsApi: StockDetailsAPI, diffTraccer: StockPriceDiffTracker): StockInfoDao {
+        return StockInfoDaoImpl(cache, api, detailsApi, diffTraccer)
     }
 
     @Provides

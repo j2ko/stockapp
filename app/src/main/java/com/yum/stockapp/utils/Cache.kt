@@ -6,4 +6,8 @@ interface Cache<T> {
     fun getOrDefault(key: String, defaultValue: T): T
 
     fun putAndGet(key: String, newValue: T): T
+
+    fun remove(key: String): T?
+
+    operator fun set(key: String, value: T)
 }
