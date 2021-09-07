@@ -17,15 +17,16 @@ import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.*
 
-class RecyclerViewViewHolder(v : View, private val glide : RequestManager): RecyclerView.ViewHolder(v) {
+class RecyclerViewViewHolder(v : View, priceFormatter: NumberFormat, percentageFormatter: NumberFormat, glide: RequestManager): RecyclerView.ViewHolder(v) {
     private var stockId : TextView? = v.findViewById(R.id.stockId)
     private var stockCompanyPicture: ImageView? = v.findViewById(R.id.stockCompanyLogo)
     private var stockCompanyName : TextView? = v.findViewById(R.id.stockCompanyName)
     private var stockCompanyPrice : TextView? = v.findViewById(R.id.stockCompanyPrice)
     private var stockCompanyChangeIndicator : ImageView? = v.findViewById(R.id.stockCompanyChangeIndicator)
     private var stockCompanyChangeValue : TextView? = v.findViewById(R.id.stockCompanyChangeValue)
-    private var numberFormatter : NumberFormat = DecimalFormat("00000.000¤").also { it.currency = Currency.getInstance("USD") }
-    private var percentageFormatter : NumberFormat = DecimalFormat("+#00.0000%;-#00.0000%")
+    private var numberFormatter = priceFormatter
+    private var percentageFormatter = percentageFormatter
+    private val glide = glide
 
     fun bind(info: StockInfo) {
         itemView.setOnClickListener{
@@ -50,12 +51,12 @@ class RecyclerViewViewHolder(v : View, private val glide : RequestManager): Recy
     }
 }
 
-class RecyclerViewAdapter constructor(private val glide: RequestManager): RecyclerView.Adapter<RecyclerViewViewHolder>() {
+class RecyclerViewAdapter constructor(private val priceFomatter: NumberFormat , private val percentageFormatter: NumberFormat, private val glide: RequestManager): RecyclerView.Adapter<RecyclerViewViewHolder>() {
     var stockInfoList : List<StockInfo> = Collections.emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewViewHolder {
         var itemView = LayoutInflater.from(parent.context).inflate(R.layout.stock_list_item, parent, false)
-        return RecyclerViewViewHolder(itemView, glide)
+        return RecyclerViewViewHolder(itemView, priceFomatter, percentageFormatter, glide)
     }
 
     override fun onBindViewHolder(holder: RecyclerViewViewHolder, position: Int) {

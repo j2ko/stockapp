@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import android.icu.number.NumberFormatter
 import com.yum.stockapp.data.api.StockDetailsAPI
 import com.yum.stockapp.data.api.StockTickerAPI
 import com.yum.stockapp.data.dao.*
@@ -12,11 +13,16 @@ import com.yum.stockapp.data.model.StockPrice
 import com.yum.stockapp.data.repository.StockInfoRepository
 import com.yum.stockapp.data.repository.StockInfoRepositoryImpl
 import com.yum.stockapp.utils.Cache
+import com.yum.stockapp.utils.FormatterFactory
 import com.yum.stockapp.utils.SingleItemCache
 import com.yum.stockapp.utils.TimeBasedCache
 import dagger.Module
 import dagger.Provides
+import java.text.DecimalFormat
+import java.text.NumberFormat
+import java.util.*
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -60,5 +66,19 @@ class AppModule {
     @Singleton
     fun provideStockInfoRepository(dao : StockInfoDao): StockInfoRepository {
         return StockInfoRepositoryImpl(dao)
+    }
+
+    @Provides
+    @Singleton
+    @Named("PRICE")
+    fun providesFormatterPrice(): NumberFormat {
+        return DecimalFormat("00000.000¤").also { it.currency = Currency.getInstance("USD") }
+    }
+
+    @Provides
+    @Singleton
+    @Named("PERCENTAGE")
+    fun providesFormatterPercentage(): NumberFormat {
+        return DecimalFormat("+#00.0000%;-#00.0000%")
     }
 }

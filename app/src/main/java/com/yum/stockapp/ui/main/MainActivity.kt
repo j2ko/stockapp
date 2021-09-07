@@ -16,13 +16,23 @@ import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.HasActivityInjector
 import dagger.android.support.DaggerAppCompatActivity
+import java.text.NumberFormat
 import javax.inject.Inject
+import javax.inject.Named
 
 class MainActivity : DaggerAppCompatActivity() {
     private lateinit var recyclerView : RecyclerView
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    @Inject
+    @field:Named("PRICE")
+    lateinit var priceFormatter : NumberFormat
+
+    @Inject
+    @field:Named("PERCENTAGE")
+    lateinit var percentageFormatter : NumberFormat
 
     private val mainViewModel: MainViewModel by viewModels {
         viewModelFactory
@@ -35,7 +45,7 @@ class MainActivity : DaggerAppCompatActivity() {
 
         recyclerView = findViewById(R.id.stockList)
         // TODO: Move Glide to inject
-        var adapter = RecyclerViewAdapter(Glide.with(this))
+        var adapter = RecyclerViewAdapter(priceFormatter, percentageFormatter, Glide.with(this))
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
