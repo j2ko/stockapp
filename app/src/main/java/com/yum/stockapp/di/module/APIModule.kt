@@ -11,7 +11,7 @@ import com.tinder.scarlet.websocket.okhttp.newWebSocketFactory
 import com.yum.stockapp.BuildConfig
 import com.yum.stockapp.data.api.adapters.StockCompanyTypeAdapter
 import com.yum.stockapp.data.api.adapters.StockPriceAdapter
-import com.yum.stockapp.data.api.adapters.UriAdapter
+import com.yum.stockapp.data.api.adapters.URIAdapter
 import com.yum.stockapp.data.api.StockDetailsAPI
 import com.yum.stockapp.data.api.StockTickerAPI
 import dagger.Module
@@ -44,7 +44,7 @@ class APIModule {
     @Singleton
     fun providesMoshi(): Moshi {
         return Moshi.Builder()
-            .add(UriAdapter())
+            .add(URIAdapter())
             .add(StockPriceAdapter())
             .add(StockCompanyTypeAdapter())
             .add(KotlinJsonAdapterFactory())

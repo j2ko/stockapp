@@ -1,6 +1,6 @@
 package com.yum.stockapp.data.api.model
 
-import android.net.Uri
+import java.net.URI
 
 data class StockDetailResponse(
     val id: String,
@@ -9,6 +9,6 @@ data class StockDetailResponse(
     val companyType: Set<StockCompanyType>,
     val allTimeHigh: StockPrice,
     val address: String,
-    val imageUrl: Uri,
-    val website: Uri,
+    val imageUrl: URI,
+    val website: URI,
 )

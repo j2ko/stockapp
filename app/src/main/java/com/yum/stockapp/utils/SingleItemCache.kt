@@ -1,6 +1,5 @@
 package com.yum.stockapp.utils
 
-//TODO : optimize code
 class SingleItemCache<T> : Cache<T> {
     private val internalCache = mutableMapOf<String, T>()
     override fun get(key: String): T? {

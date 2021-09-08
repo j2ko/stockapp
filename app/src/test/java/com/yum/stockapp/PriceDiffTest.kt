@@ -8,7 +8,7 @@ import com.yum.stockapp.data.model.StockPrice as StockPrice1
 
 class PriceDiffTest {
     @Test
-    fun `should get 20% change if 120 value provided after 100`() {
+    fun `StockPriceDiff should be correctly culucaleted`() {
         val differ1 = StockPriceDiff.percents(
             StockPrice1(BigDecimal.valueOf(125)),
             StockPrice1(BigDecimal.valueOf(100)))
@@ -17,6 +17,6 @@ class PriceDiffTest {
         val differ2 = StockPriceDiff.percents(
             StockPrice1(BigDecimal.valueOf(100)),
             StockPrice1(BigDecimal.valueOf(125)))
-        Assert.assertEquals(differ2.value, BigDecimal.valueOf(-0.25))
+        Assert.assertEquals(differ2.value, BigDecimal("-0.250000"))
     }
 }

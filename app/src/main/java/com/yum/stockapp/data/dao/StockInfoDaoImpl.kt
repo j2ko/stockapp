@@ -1,21 +1,14 @@
 package com.yum.stockapp.data.dao
 
-import android.util.Log
 import com.yum.stockapp.data.api.StockDetailsAPI
 import com.yum.stockapp.data.api.StockTickerAPI
 import com.yum.stockapp.data.api.model.StockTickerEntry
 import com.yum.stockapp.data.model.*
 import com.yum.stockapp.utils.Cache
-import com.yum.stockapp.utils.SingleItemCache
-import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.processors.AsyncProcessor
 import io.reactivex.processors.BehaviorProcessor
-import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.AsyncSubject
 import java.util.*
 
 class StockInfoDaoImpl(

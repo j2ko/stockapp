@@ -1,13 +1,11 @@
 package com.yum.stockapp
 
-import android.net.Uri
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.yum.stockapp.data.api.StockDetailsAPI
 import com.yum.stockapp.data.api.adapters.StockCompanyTypeAdapter
 import com.yum.stockapp.data.api.adapters.StockPriceAdapter
-import com.yum.stockapp.data.api.adapters.UriAdapter
-import com.yum.stockapp.data.api.StockDetailsAPI
+import com.yum.stockapp.data.api.adapters.URIAdapter
 import com.yum.stockapp.data.api.model.StockCompanyType
 import com.yum.stockapp.data.api.model.StockDetailResponse
 import com.yum.stockapp.data.api.model.StockPrice
@@ -19,11 +17,11 @@ import okio.buffer
 import okio.source
 import org.junit.After
 import org.junit.Test
-import org.junit.runner.RunWith
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.math.BigDecimal
+import java.net.URI
 import java.nio.charset.StandardCharsets
 import java.util.concurrent.TimeUnit
 
@@ -39,7 +37,7 @@ class StockDetailsAPIServiceTest {
     private val moshi = Moshi.Builder()
         .add(StockPriceAdapter())
         .add(StockCompanyTypeAdapter())
-        .add(UriAdapter())
+        .add(URIAdapter())
         .add(KotlinJsonAdapterFactory())
         .build()
 
@@ -70,8 +68,8 @@ class StockDetailsAPIServiceTest {
             setOf(StockCompanyType("Food"), StockCompanyType("Tech")),
             StockPrice(BigDecimal("105.44")),
             "1441 Gardiner Lane Louisville, KY 40213 United States",
-            Uri.parse("https://interviews.yum.dev/static/images/yum_logo.png"),
-            Uri.parse("https://www.yum.com"))
+            URI("https://interviews.yum.dev/static/images/yum_logo.png"),
+            URI("https://www.yum.com"))
 
         mockWebServer.enqueueResponseFromFile("stockdetail_valid_response.json", 200)
         val callback = TestObserver<StockDetailResponse>()
