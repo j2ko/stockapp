@@ -71,7 +71,8 @@ class RecyclerViewAdapter constructor(
     private val glide: RequestManager,
     private val itemClickListener: (String) -> Unit
 ) : RecyclerView.Adapter<RecyclerViewViewHolder>() {
-    var stockInfoList: List<StockInfo> = Collections.emptyList()
+    var stockInfoListFiltered = Optional.empty<List<StockInfo>>()
+    var stockInfoList: List<StockInfo> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewViewHolder {
         val itemView =
@@ -80,10 +81,18 @@ class RecyclerViewAdapter constructor(
     }
 
     override fun onBindViewHolder(holder: RecyclerViewViewHolder, position: Int) {
-        holder.bind(stockInfoList[position])
+        holder.bind(getItem(position))
     }
 
     override fun getItemCount(): Int {
-        return stockInfoList.size
+        return stockInfoListFiltered.map {
+            it.size
+        }.orElse(stockInfoList.size)
+    }
+
+    private fun getItem(possition: Int): StockInfo {
+        return stockInfoListFiltered.map {
+            it[possition]
+        }.orElse(stockInfoList[possition])
     }
 }
