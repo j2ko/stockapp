@@ -10,8 +10,7 @@ import dagger.Provides
 class MainActivityModule {
     @Provides
     fun provideMainViewModel(
-        repo: StockInfoRepository,
-        filterRepo: FilterRepository,
+        repo: StockInfoRepository
     ): MainViewModel {
         return MainViewModel(repo)
     }

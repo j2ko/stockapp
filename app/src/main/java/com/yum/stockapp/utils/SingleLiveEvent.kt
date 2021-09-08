@@ -1,7 +1,5 @@
 package com.yum.stockapp.utils
-import android.util.Log
 import androidx.annotation.MainThread
-import androidx.annotation.Nullable
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -18,22 +16,21 @@ import java.util.concurrent.atomic.AtomicBoolean
  * Note that only one observer is going to be notified of changes.
  */
 class SingleLiveEvent<T> : MutableLiveData<T>() {
-
-    private val mPending = AtomicBoolean(false)
+    private val pending = AtomicBoolean(false)
 
     @MainThread
     override fun observe(owner: LifecycleOwner, observer: Observer<in T>) {
         // Observe the internal MutableLiveData
         super.observe(owner, Observer { t ->
-            if (mPending.compareAndSet(true, false)) {
+            if (pending.compareAndSet(true, false)) {
                 observer.onChanged(t)
             }
         })
     }
 
     @MainThread
-    override fun setValue(@Nullable t: T?) {
-        mPending.set(true)
+    override fun setValue(t: T?) {
+        pending.set(true)
         super.setValue(t)
     }
 
