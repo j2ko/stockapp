@@ -1,7 +1,7 @@
 package com.yum.stockapp.utils
 
 import com.yum.stockapp.data.model.StockDetails
-import java.util.*
+import java.util.Date
 import java.util.concurrent.TimeUnit
 
 class TimeBasedCache<T>(amount: Long, unit: TimeUnit) : Cache<StockDetails> {

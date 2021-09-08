@@ -1,6 +1,6 @@
 package com.yum.stockapp.data.model
 
-import java.util.*
+import java.util.Optional
 
 
 data class StockInfo(

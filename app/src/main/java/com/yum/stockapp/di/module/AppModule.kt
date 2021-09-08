@@ -18,7 +18,7 @@ import dagger.Module
 import dagger.Provides
 import java.text.DecimalFormat
 import java.text.NumberFormat
-import java.util.*
+import java.util.Currency
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton

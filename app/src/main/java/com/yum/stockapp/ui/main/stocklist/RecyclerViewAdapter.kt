@@ -13,7 +13,7 @@ import com.google.android.material.chip.ChipGroup
 import com.yum.stockapp.R
 import com.yum.stockapp.data.model.StockInfo
 import java.text.NumberFormat
-import java.util.*
+import java.util.Optional
 
 class RecyclerViewViewHolder(
     v: View,

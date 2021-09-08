@@ -1,7 +1,7 @@
 package com.yum.stockapp.data.repository
 
 import com.yum.stockapp.data.model.StockFilter
-import java.util.*
+import java.util.Optional
 
 interface FilterStorage {
     fun write(value: StockFilter): Boolean

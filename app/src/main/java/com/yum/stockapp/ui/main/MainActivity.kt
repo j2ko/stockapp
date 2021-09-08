@@ -37,7 +37,7 @@ import dagger.android.support.DaggerAppCompatActivity
 import io.reactivex.Observable.just
 import io.reactivex.rxkotlin.Observables
 import java.text.NumberFormat
-import java.util.*
+import java.util.Optional
 import javax.inject.Inject
 import javax.inject.Named
 

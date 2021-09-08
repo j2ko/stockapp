@@ -9,7 +9,7 @@ import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.schedulers.Schedulers
-import java.util.*
+import java.util.Optional
 
 class StockInfoDaoImpl(
     val cache: Cache<StockDetails>,

@@ -3,7 +3,7 @@ package com.yum.stockapp.data.repository
 import android.content.SharedPreferences
 import com.yum.stockapp.data.model.StockCompanyType
 import com.yum.stockapp.data.model.StockFilter
-import java.util.*
+import java.util.Optional
 
 class FilterStorageSharedPreferenceBased(private val sharedPreferences: SharedPreferences) : FilterStorage {
     companion object {
