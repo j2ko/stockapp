@@ -23,6 +23,9 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
 
+const  val PRICE_KEY = "PRICE_KEY"
+const  val PERCENTAGE_KEY = "PERCENTAGE_KEY"
+
 @Module
 class AppModule {
     @Provides
@@ -73,7 +76,7 @@ class AppModule {
 
     @Provides
     @Singleton
-    @Named("PRICE")
+    @Named(PRICE_KEY)
     fun providesFormatterPrice(): NumberFormat {
         return DecimalFormat("####0.0000¤").also {
             it.currency = Currency.getInstance("USD")
@@ -83,7 +86,7 @@ class AppModule {
 
     @Provides
     @Singleton
-    @Named("PERCENTAGE")
+    @Named(PERCENTAGE_KEY)
     fun providesFormatterPercentage(): NumberFormat {
         return DecimalFormat("+#00.0000%;-#00.0000%")
     }

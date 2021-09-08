@@ -1,5 +1,6 @@
 package com.yum.stockapp.ui.details
 
+import android.net.Uri
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
@@ -9,7 +10,8 @@ import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.yum.stockapp.R
-import com.yum.stockapp.data.model.StockInfo
+import com.yum.stockapp.di.module.PERCENTAGE_KEY
+import com.yum.stockapp.di.module.PRICE_KEY
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
 import java.text.NumberFormat
@@ -25,11 +27,11 @@ class DetailsActivity : DaggerAppCompatActivity() {
     lateinit var stockId: String
 
     @Inject
-    @field:Named("PRICE")
+    @field:Named(PRICE_KEY)
     lateinit var priceFormatter: NumberFormat
 
     @Inject
-    @field:Named("PERCENTAGE")
+    @field:Named(PERCENTAGE_KEY)
     lateinit var percentageFormatter: NumberFormat
 
     @Inject
@@ -73,7 +75,7 @@ class DetailsActivity : DaggerAppCompatActivity() {
                     R.drawable.stock_change_arrow_down else R.drawable.stock_change_arrow_up
                 )
                 item.details.ifPresent { details ->
-                    glide.load(details.imageUrl).into(stockCompanyLogo)
+                    glide.load(Uri.parse(details.imageUrl.toASCIIString())).into(stockCompanyLogo)
                     stockCompanyAddress.text = details.address
                     stockCompanyWebsite.text = details.website.toString()
                     stockCompanyAllTimeHigh.text = details.allTimeHigh.format(priceFormatter)

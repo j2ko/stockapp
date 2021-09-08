@@ -25,6 +25,8 @@ import com.google.android.material.chip.ChipGroup
 import com.yum.stockapp.R
 import com.yum.stockapp.data.model.StockCompanyType
 import com.yum.stockapp.data.model.StockFilter
+import com.yum.stockapp.di.module.PERCENTAGE_KEY
+import com.yum.stockapp.di.module.PRICE_KEY
 import com.yum.stockapp.ui.details.DetailsActivity
 import com.yum.stockapp.ui.details.DetailsActivity.Companion.STOCK_ID
 import com.yum.stockapp.ui.main.stocklist.RecyclerViewAdapter
@@ -49,11 +51,11 @@ class MainActivity : DaggerAppCompatActivity() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     @Inject
-    @field:Named("PRICE")
+    @field:Named(PRICE_KEY)
     lateinit var priceFormatter: NumberFormat
 
     @Inject
-    @field:Named("PERCENTAGE")
+    @field:Named(PERCENTAGE_KEY)
     lateinit var percentageFormatter: NumberFormat
 
     private val mainViewModel: MainViewModel by viewModels {

@@ -4,17 +4,12 @@ import androidx.lifecycle.*
 import com.yum.stockapp.data.model.StockCompanyType
 import com.yum.stockapp.data.model.StockFilter
 import com.yum.stockapp.data.model.StockInfo
-import com.yum.stockapp.data.repository.FilterRepository
 import com.yum.stockapp.data.repository.StockInfoRepository
 import com.yum.stockapp.utils.SingleLiveEvent
-import com.yum.stockapp.utils.toLiveData
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.mergeAllSingles
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
     private val infoRepo: StockInfoRepository,
-    private val filterRepo: FilterRepository,
 ) : ViewModel() {
     private val navigator = SingleLiveEvent<String>()
     private val filter = MutableLiveData<StockFilter>()

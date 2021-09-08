@@ -13,7 +13,7 @@ class MainActivityModule {
         repo: StockInfoRepository,
         filterRepo: FilterRepository,
     ): MainViewModel {
-        return MainViewModel(repo, filterRepo)
+        return MainViewModel(repo)
     }
 
     @Provides
