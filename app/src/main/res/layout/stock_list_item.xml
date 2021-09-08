@@ -1,98 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp">
+    android:layout_margin="5dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="8dp"
+    app:cardMaxElevation="10dp"
+    app:cardPreventCornerOverlap="true">
 
-    <ImageView
-        android:id="@+id/stockCompanyLogo"
-        android:layout_width="40dp"
-        android:layout_height="0dp"
-        android:paddingRight="5dp"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="@+id/titleContainer"
-        app:layout_constraintEnd_toStartOf="@id/titleContainer"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/titleContainer"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/titleContainer"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="2dp"
-        app:layout_constraintStart_toEndOf="@id/stockCompanyLogo"
-        app:layout_constraintTop_toTopOf="parent">
+        android:padding="10dp">
+
+        <FrameLayout
+            android:id="@+id/stockCompanyLogoContainer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/frameLayout"
+            app:layout_constraintDimensionRatio="H,1:1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/log_border" />
+
+            <ImageView
+                android:id="@+id/stockCompanyLogo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="1dp"
+                tools:srcCompat="@tools:sample/avatars" />
+        </FrameLayout>
 
         <TextView
-            android:id="@+id/stockId"
+            android:id="@+id/stockCompanyId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            app:layout_constraintStart_toEndOf="@+id/stockCompanyLogoContainer"
+            app:layout_constraintTop_toTopOf="@+id/stockCompanyLogoContainer"
             tools:text="hello world" />
 
         <TextView
             android:id="@+id/stockCompanyName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
+            app:layout_constraintBottom_toBottomOf="@+id/stockCompanyLogoContainer"
+            app:layout_constraintStart_toStartOf="@+id/stockCompanyId"
             tools:text="Some company name" />
-    </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <FrameLayout
-        android:id="@+id/separator"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintEnd_toStartOf="@id/stockCompanyChangeIndicatorContainer"
-        app:layout_constraintStart_toEndOf="@id/titleContainer"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_default="spread" />
-
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/stockCompanyChangeIndicatorContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/stockCompanyPrice"
-        app:layout_constraintStart_toEndOf="@id/separator"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/stockCompanyChangeIndicator"
-            android:layout_width="wrap_content"
-            android:layout_height="18dp"
-            android:layout_gravity="center_horizontal"
-            android:scaleType="fitXY"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/stockCompanyChangeValue"
+            app:layout_constraintDimensionRatio="H,1:1"
+            app:layout_constraintEnd_toStartOf="@+id/stockCompanyChangeValue"
+            app:layout_constraintTop_toTopOf="@+id/stockCompanyChangeValue"
             tools:srcCompat="@drawable/stock_change_arrow_up" />
+
         <TextView
-            android:paddingRight="5dp"
             android:id="@+id/stockCompanyChangeValue"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_gravity="center"
+            android:paddingLeft="5dp"
             android:textAlignment="center"
             android:textSize="14sp"
+            android:typeface="monospace"
+            app:layout_constraintEnd_toEndOf="@+id/stockCompanyPrice"
+            app:layout_constraintTop_toBottomOf="@+id/stockCompanyPrice"
             tools:text="-0.24%" />
-    </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <TextView
-        android:id="@+id/stockCompanyPrice"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:gravity="center"
-        android:padding="2dp"
-        android:textAllCaps="true"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@id/titleContainer"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/stockCompanyChangeIndicatorContainer"
-        app:layout_constraintTop_toTopOf="@+id/titleContainer"
-        app:layout_constraintWidth_default="spread"
-        tools:text="40.333"></TextView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/stockCompanyPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="center"
+            android:textAllCaps="true"
+            android:textSize="18sp"
+            android:typeface="monospace"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_default="spread"
+            tools:text="40.333" />
+
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/stockCompanyChangeValue">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/companyTypes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

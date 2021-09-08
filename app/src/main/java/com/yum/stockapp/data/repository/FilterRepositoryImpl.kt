@@ -5,7 +5,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 
-class FilterRepositoryImpl(private val storage: FilterStorage): FilterRepository {
+class FilterRepositoryImpl(private val storage: FilterStorage) : FilterRepository {
     override fun getFilter(): Observable<StockFilter> {
         return Observable.fromCallable {
             storage.read().orElse(StockFilter("", emptySet()))

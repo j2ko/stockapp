@@ -10,5 +10,5 @@ interface StockTickerAPI {
     fun observeWebSocketEvent(): Flowable<WebSocket.Event>
 
     @Receive
-    fun observeStockChange() : Flowable<List<StockTickerEntry>>
+    fun observeStockChange(): Flowable<List<StockTickerEntry>>
 }

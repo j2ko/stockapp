@@ -18,23 +18,30 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.AsyncSubject
 import java.util.*
 
-class StockInfoDaoImpl constructor(val cache: Cache<StockDetails>, val api: StockTickerAPI, val detailsApi: StockDetailsAPI, val stockPriceDiff: StockPriceDiffTracker): StockInfoDao {
+class StockInfoDaoImpl(
+    val cache: Cache<StockDetails>,
+    val api: StockTickerAPI,
+    private val detailsApi: StockDetailsAPI,
+    private val stockPriceDiff: StockPriceDiffTracker,
+) : StockInfoDao {
     private fun getStockDiff(id: String, currentPrice: StockPrice): Observable<StockPriceDiff> {
         return stockPriceDiff.getDiff(id, currentPrice)
     }
 
     private fun getStockDetails(id: String): Observable<Optional<StockDetails>> {
         val detailsNetwork = detailsApi.getStockDetail(id).map {
-            val details = StockDetails(StockPrice(it.allTimeHigh.value), it.address, it.imageUrl, it.website)
+            val details =
+                StockDetails(StockPrice(it.allTimeHigh.value), it.address, it.imageUrl, it.website)
             cache.putAndGet(id, details)
             Optional.of(details)
         }.subscribeOn(Schedulers.io()).toObservable()
-        val detailsCache = Observable.fromCallable{
-            cache[id]?.let {  Observable.just(Optional.of(it)) } ?: Observable.empty()
+        val detailsCache = Observable.fromCallable {
+            cache[id]?.let { Observable.just(Optional.of(it)) } ?: Observable.empty()
         }.subscribeOn(Schedulers.io()).flatMap { it }
 
         //TODO : cache invalidation
-        return Observable.concat(detailsCache, detailsNetwork).firstOrError().map { it }.toObservable()
+        return Observable.concat(detailsCache, detailsNetwork).firstOrError().map { it }
+            .toObservable()
     }
 
     private var centrallistener = BehaviorProcessor.create<List<StockInfo>>()
@@ -47,11 +54,11 @@ class StockInfoDaoImpl constructor(val cache: Cache<StockDetails>, val api: Stoc
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .doOnNext {
-                    Log.e("TAG", "received   " + it)
+                    Log.e("TAG", "received   $it")
                 }
                 .concatMapIterable { it }
                 .doOnNext {
-                    Log.e("TAG", "handle   " + it)
+                    Log.e("TAG", "handle   $it")
                 }
                 .map {
                     Observable.zip(
@@ -66,13 +73,17 @@ class StockInfoDaoImpl constructor(val cache: Cache<StockDetails>, val api: Stoc
         }
         .subscribe(centrallistener)
 
-    override fun getStockInfo() : Flowable<List<StockInfo>> {
-        return centrallistener.subscribeOn(Schedulers.io()).doOnNext({
+    override fun getStockInfo(): Flowable<List<StockInfo>> {
+        return centrallistener.subscribeOn(Schedulers.io()).doOnNext {
             Log.e("TAG", "So we are still emitting")
-        })
+        }
     }
 
-   fun createStockInfo(entry: StockTickerEntry, priceChange : StockPriceDiff, details: Optional<StockDetails>) : StockInfo {
+    private fun createStockInfo(
+        entry: StockTickerEntry,
+        priceChange: StockPriceDiff,
+        details: Optional<StockDetails>,
+    ): StockInfo {
         return StockInfo(
             entry.id,
             entry.name,

@@ -1,4 +1,3 @@
-package com.yum.stockapp.ui.main;
+package com.yum.stockapp.ui.main
 
-interface MainNavigator {
-}
+interface MainNavigator

@@ -1,6 +1,6 @@
 package com.yum.stockapp.data.model
 
-data class StockFilter (
+data class StockFilter(
     val name: String,
-    val companyType: Set<StockCompanyType>
+    val companyType: Set<StockCompanyType>,
 )

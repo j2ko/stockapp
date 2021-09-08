@@ -11,25 +11,25 @@ class TimeBasedCache<T>(amount: Long, unit: TimeUnit) : Cache<StockDetails> {
 
     override fun get(key: String): StockDetails? {
         return detailsExpirationCache[key]?.let {
-           if (Date().time > it)  {
-               // Invalidate cache entry
-               remove(key)
-               null
-           } else {
-               detailsCache[key]
-           }
+            if (Date().time > it) {
+                // Invalidate cache entry
+                remove(key)
+                null
+            } else {
+                detailsCache[key]
+            }
         }
     }
 
     override fun getOrDefault(key: String, defaultValue: StockDetails): StockDetails {
-        return get(key)?:defaultValue
+        return get(key) ?: defaultValue
     }
 
     override fun putAndGet(key: String, newValue: StockDetails): StockDetails {
         val oldValue = get(key)
         set(key, newValue)
 
-        return oldValue?:newValue
+        return oldValue ?: newValue
     }
 
     override fun set(key: String, value: StockDetails) {

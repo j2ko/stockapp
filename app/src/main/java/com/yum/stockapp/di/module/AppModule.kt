@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
-import android.icu.number.NumberFormatter
 import com.yum.stockapp.data.api.StockDetailsAPI
 import com.yum.stockapp.data.api.StockTickerAPI
 import com.yum.stockapp.data.dao.*
@@ -13,7 +12,6 @@ import com.yum.stockapp.data.model.StockPrice
 import com.yum.stockapp.data.repository.StockInfoRepository
 import com.yum.stockapp.data.repository.StockInfoRepositoryImpl
 import com.yum.stockapp.utils.Cache
-import com.yum.stockapp.utils.FormatterFactory
 import com.yum.stockapp.utils.SingleItemCache
 import com.yum.stockapp.utils.TimeBasedCache
 import dagger.Module
@@ -35,14 +33,14 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideSharedPreferences(context: Context) : SharedPreferences {
+    fun provideSharedPreferences(context: Context): SharedPreferences {
         // TODO: make ROOT Configurable
         return context.getSharedPreferences("ROOT", MODE_PRIVATE)
     }
 
     @Provides
     @Singleton
-    fun providesStockDiffTracker(cache: Cache<StockPrice>) : StockPriceDiffTracker {
+    fun providesStockDiffTracker(cache: Cache<StockPrice>): StockPriceDiffTracker {
         return StockPriceDiffTrackerImpl(cache)
     }
 
@@ -58,13 +56,18 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideStockInfoDao(cache : Cache<StockDetails>, api: StockTickerAPI, detailsApi: StockDetailsAPI, diffTraccer: StockPriceDiffTracker): StockInfoDao {
-        return StockInfoDaoImpl(cache, api, detailsApi, diffTraccer)
+    fun provideStockInfoDao(
+        cache: Cache<StockDetails>,
+        api: StockTickerAPI,
+        detailsApi: StockDetailsAPI,
+        diffTracer: StockPriceDiffTracker,
+    ): StockInfoDao {
+        return StockInfoDaoImpl(cache, api, detailsApi, diffTracer)
     }
 
     @Provides
     @Singleton
-    fun provideStockInfoRepository(dao : StockInfoDao): StockInfoRepository {
+    fun provideStockInfoRepository(dao: StockInfoDao): StockInfoRepository {
         return StockInfoRepositoryImpl(dao)
     }
 
@@ -72,7 +75,10 @@ class AppModule {
     @Singleton
     @Named("PRICE")
     fun providesFormatterPrice(): NumberFormat {
-        return DecimalFormat("00000.000¤").also { it.currency = Currency.getInstance("USD") }
+        return DecimalFormat("####0.0000¤").also {
+            it.currency = Currency.getInstance("USD")
+            it.minimumFractionDigits = 5
+        }
     }
 
     @Provides

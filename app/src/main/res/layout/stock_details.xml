@@ -6,119 +6,114 @@
     android:paddingTop="10dp"
     android:paddingHorizontal="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <FrameLayout
         android:id="@+id/companyLogoContainer"
-        android:layout_width="wrap_content"
-        android:paddingBottom="10dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:layout_constraintDimensionRatio="W,1:1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-    <ImageView
-        android:id="@+id/companyLogo"
-        android:layout_width="200dp"
-        android:layout_height="150dp"
-        tools:srcCompat="@tools:sample/avatars"
-        />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/log_border" />
+        <ImageView
+            android:id="@+id/detailsLogo"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:padding="1dp"
+            android:scaleType="fitXY"
+            tools:srcCompat="@tools:sample/avatars" />
     </FrameLayout>
-        <TextView
-            android:id="@+id/companyPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/companyLogoContainer"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:textSize="32sp"
-            tools:text="00000.00$"/>
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/priceIndicator"
-                android:paddingBottom="5dp"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:scaleType="fitXY"
-                app:layout_constraintTop_toBottomOf="@id/companyPrice"
-                app:layout_constraintLeft_toLeftOf="@id/companyPrice"
-                app:layout_constraintBottom_toBottomOf="@id/priceChange"
-                app:layout_constraintStart_toStartOf="@id/companyPrice"
-                tools:srcCompat="@drawable/stock_change_arrow_up" />
-    <FrameLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="@id/companyPrice"
-        app:layout_constraintTop_toBottomOf="@id/companyPrice"
-        app:layout_constraintBottom_toTopOf="@id/alltimehighlable"
-        app:layout_constraintEnd_toEndOf="@id/alltimehighlable">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="center"
-            tools:srcCompat="@drawable/stock_change_arrow_up" />
-    </FrameLayout>
-            <TextView
-                android:paddingLeft="10dp"
-                android:id="@+id/priceChange"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAlignment="textEnd"
-                app:layout_constraintTop_toBottomOf="@id/companyPrice"
-                app:layout_constraintEnd_toEndOf="@id/companyPrice"
-                android:textSize="20sp"
-                tools:text="-100.0000%"/>
+    <TextView
+        android:id="@+id/detailsPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="32sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="00000.000000$" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/detailsIndicator"
+        android:layout_width="wrap_content"
+        android:paddingVertical="5dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/detailsAllTimeHighLabel"
+        app:layout_constraintEnd_toStartOf="@+id/detailsPriceChange"
+        app:layout_constraintTop_toBottomOf="@id/detailsPrice"
+        tools:srcCompat="@drawable/stock_change_arrow_up" />
+    <TextView
+        android:id="@+id/detailsPriceChange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:textAlignment="textEnd"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@id/detailsPrice"
+        app:layout_constraintTop_toBottomOf="@id/detailsPrice"
+        tools:text="-100.0000%" />
+
+    <TextView
+        android:id="@+id/detailsAllTimeHighLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="ATH"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/detailsAllTimeHigh"
+        app:layout_constraintTop_toBottomOf="@id/detailsPriceChange" />
            <TextView
-                android:text="ATH"
-               android:id="@+id/alltimehighlable"
-                android:layout_gravity="center_vertical"
-                android:textSize="16sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/priceChange"
-               app:layout_constraintStart_toStartOf="@id/companyPrice"/>
-           <TextView
-               tools:text="00000.00$"
+               tools:text="00000.000000$"
+                android:id="@+id/detailsAllTimeHigh"
                 android:textSize="16sp"
                 android:textAlignment="textEnd"
                 android:layout_width="0dp"
-               app:layout_constraintTop_toBottomOf="@id/priceChange"
-               app:layout_constraintEnd_toEndOf="@id/priceChange"
+               app:layout_constraintTop_toBottomOf="@id/detailsPriceChange"
+               app:layout_constraintEnd_toEndOf="@id/detailsPriceChange"
                 android:layout_height="wrap_content"/>
+
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/detailsId"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:id="@+id/companyId"
-        app:layout_constraintTop_toBottomOf="@id/companyLogoContainer"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="YUM"
+        android:textSize="26sp"
         android:textStyle="bold"
-        android:textSize="28sp"/>
+        app:layout_constraintBottom_toBottomOf="@+id/detailsName"
+        app:layout_constraintStart_toStartOf="@+id/companyLogoContainer"
+        app:layout_constraintTop_toBottomOf="@+id/companyLogoContainer"
+        tools:text="AAPL" />
+
     <TextView
-        android:id="@+id/companyName"
+        android:id="@+id/detailsName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Some company name"
-        android:textSize="28sp"
         android:paddingLeft="5dp"
-        app:layout_constraintLeft_toRightOf="@id/companyId"
-        app:layout_constraintTop_toTopOf="@id/companyId"
-        app:layout_constraintBottom_toBottomOf="@id/companyId"
-        />
+        android:textSize="26sp"
+        app:layout_constraintStart_toEndOf="@+id/detailsId"
+        app:layout_constraintTop_toBottomOf="@+id/companyLogoContainer"
+        tools:text="Some company name" />
+
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/companyAddress"
+        android:id="@+id/detailsAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="1441 Gardiner Lane Louisville, KY 40213 United States"
         android:paddingTop="10dp"
         android:maxLines="3"
-        app:layout_constraintTop_toBottomOf="@id/companyName"
+        app:layout_constraintTop_toBottomOf="@id/detailsName"
         app:layout_constraintStart_toStartOf="parent"
         android:textSize="16sp"
         />
     <TextView
-        android:id="@+id/companyWebsite"
+        android:id="@+id/detailsWebsite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
         tools:text="http://google.com"
-        app:layout_constraintTop_toBottomOf="@id/companyAddress"
+        app:layout_constraintTop_toBottomOf="@id/detailsAddress"
         app:layout_constraintStart_toStartOf="parent"
         android:textSize="16sp"
         />

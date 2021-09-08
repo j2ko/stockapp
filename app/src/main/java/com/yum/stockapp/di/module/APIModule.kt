@@ -27,7 +27,8 @@ import javax.inject.Singleton
 class APIModule {
     @Provides
     @Singleton
-    fun providesStockDetailsAPI(retrofit: Retrofit): StockDetailsAPI = retrofit.create(StockDetailsAPI::class.java)
+    fun providesStockDetailsAPI(retrofit: Retrofit): StockDetailsAPI =
+        retrofit.create(StockDetailsAPI::class.java)
 
 
     @Provides
@@ -36,11 +37,12 @@ class APIModule {
 
     @Provides
     @Singleton
-    fun provideWebSocketLifecycle(application : Application): Lifecycle = AndroidLifecycle.ofApplicationForeground(application)
+    fun provideWebSocketLifecycle(application: Application): Lifecycle =
+        AndroidLifecycle.ofApplicationForeground(application)
 
     @Provides
     @Singleton
-    fun providesMoshi() : Moshi {
+    fun providesMoshi(): Moshi {
         return Moshi.Builder()
             .add(UriAdapter())
             .add(StockPriceAdapter())
@@ -51,7 +53,10 @@ class APIModule {
 
     @Provides
     @Singleton
-    fun providesRetrofitInterface(client : OkHttpClient, converterFactory: Converter.Factory): Retrofit {
+    fun providesRetrofitInterface(
+        client: OkHttpClient,
+        converterFactory: Converter.Factory,
+    ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_REST_API_URL)
             .client(client)
@@ -62,13 +67,18 @@ class APIModule {
 
     @Provides
     @Singleton
-    fun providesConverterFactory(moshi: Moshi) : Converter.Factory {
+    fun providesConverterFactory(moshi: Moshi): Converter.Factory {
         return MoshiConverterFactory.create(moshi)
     }
 
     @Provides
     @Singleton
-    fun providesScarletInterface(livecycle: Lifecycle, websocketFactory: WebSocket.Factory, messageAdapter: MessageAdapter.Factory, streamAdapter: StreamAdapter.Factory): Scarlet {
+    fun providesScarletInterface(
+        livecycle: Lifecycle,
+        websocketFactory: WebSocket.Factory,
+        messageAdapter: MessageAdapter.Factory,
+        streamAdapter: StreamAdapter.Factory,
+    ): Scarlet {
         return Scarlet.Builder()
             .webSocketFactory(websocketFactory)
             .addMessageAdapterFactory(messageAdapter)
@@ -83,7 +93,8 @@ class APIModule {
 
     @Provides
     @Singleton
-    fun provideWebSocketFactory(okHttpClient: OkHttpClient) = okHttpClient.newWebSocketFactory(BuildConfig.STOCKS_WS_URL)
+    fun provideWebSocketFactory(okHttpClient: OkHttpClient) =
+        okHttpClient.newWebSocketFactory(BuildConfig.STOCKS_WS_URL)
 
     @Provides
     @Singleton
@@ -93,7 +104,7 @@ class APIModule {
 
     @Provides
     @Singleton
-    fun providesMessageAdapterFactory(moshi: Moshi) : MessageAdapter.Factory {
+    fun providesMessageAdapterFactory(moshi: Moshi): MessageAdapter.Factory {
         return MoshiMessageAdapter.Factory(moshi)
     }
 }

@@ -6,6 +6,6 @@ import io.reactivex.Single
 
 
 interface FilterRepository {
-    fun getFilter() : Observable<StockFilter>
+    fun getFilter(): Observable<StockFilter>
     fun setFilter(filter: StockFilter): Single<Boolean>
 }

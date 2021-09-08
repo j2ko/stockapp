@@ -6,8 +6,8 @@ import com.squareup.moshi.ToJson
 
 class UriAdapter {
     @ToJson
-    fun toJson(uri : Uri) : String = uri.toString()
+    fun toJson(uri: Uri): String = uri.toString()
 
     @FromJson
-    fun fromJson(uri : String): Uri = Uri.parse(uri)
+    fun fromJson(uri: String): Uri = Uri.parse(uri)
 }

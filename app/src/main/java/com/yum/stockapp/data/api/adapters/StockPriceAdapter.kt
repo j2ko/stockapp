@@ -4,6 +4,8 @@ import com.squareup.moshi.FromJson
 import com.squareup.moshi.ToJson
 import com.yum.stockapp.data.api.model.StockPrice
 import java.math.BigDecimal
+import java.math.MathContext
+import java.math.RoundingMode
 
 class StockPriceAdapter {
     @ToJson

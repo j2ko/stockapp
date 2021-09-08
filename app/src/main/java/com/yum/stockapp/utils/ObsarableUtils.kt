@@ -13,6 +13,3 @@ fun <T> Observable<T>.toLiveData() =
         }
     }
 
-fun <T> LiveData<T>.observe(owner: LifecycleOwner, f: (T) -> Unit) =
-    observe(owner, Observer<T> {
-        f(it) })

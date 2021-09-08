@@ -11,15 +11,18 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.StockApp" >
-        <activity android:name="com.yum.stockapp.ui.main.MainActivity">
+        android:theme="@style/Theme.StockApp"
+        android:fullBackupContent="@xml/backup_descriptor">
+        <activity android:name="com.yum.stockapp.ui.main.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
+        <activity android:name="com.yum.stockapp.ui.details.DetailsActivity"
+            android:exported="false">
+        </activity>
     </application>
 
 </manifest>

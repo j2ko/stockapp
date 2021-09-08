@@ -5,10 +5,10 @@ import com.yum.stockapp.data.model.StockCompanyType
 import com.yum.stockapp.data.model.StockFilter
 import java.util.*
 
-class FilterStorageSharedPreferenceBased(val sharedPreferences: SharedPreferences) : FilterStorage {
+class FilterStorageSharedPreferenceBased(private val sharedPreferences: SharedPreferences) : FilterStorage {
     companion object {
-        val NAME_KEY = "NAME"
-        val COMPANY_TYPES = "TYPES"
+        const val NAME_KEY = "NAME"
+        const val COMPANY_TYPES = "TYPES"
     }
 
     override fun write(value: StockFilter): Boolean {

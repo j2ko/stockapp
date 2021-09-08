@@ -2,7 +2,7 @@ package com.yum.stockapp.data.api.model
 
 import android.net.Uri
 
-data class StockDetailResponse (
+data class StockDetailResponse(
     val id: String,
     val name: String,
     val price: StockPrice,

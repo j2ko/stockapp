@@ -6,19 +6,19 @@ import java.math.MathContext
 import java.math.RoundingMode
 import java.text.NumberFormat
 
-data class StockPriceDiff (
-    val value : BigDecimal
+data class StockPriceDiff(
+    val value: BigDecimal,
 ) {
     fun format(percentageFormatter: NumberFormat): String {
         return percentageFormatter.format(value)
     }
 
     fun isNegative(): Boolean {
-        return value.compareTo(BigDecimal.ZERO) < 0
+        return value < BigDecimal.ZERO
     }
 
     companion object {
-        fun percents(left: StockPrice, right: StockPrice) : StockPriceDiff {
+        fun percents(left: StockPrice, right: StockPrice): StockPriceDiff {
             return StockPriceDiff(
                 right.value
                     .subtract(left.value)

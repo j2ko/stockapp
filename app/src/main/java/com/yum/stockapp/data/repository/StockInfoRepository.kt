@@ -6,5 +6,5 @@ import io.reactivex.Flowable
 interface StockInfoRepository {
     fun getStockInfoList(): Flowable<List<StockInfo>>
 
-    fun getStockInfo(id : String): Flowable<StockInfo>
+    fun getStockInfo(id: String): Flowable<StockInfo>
 }
