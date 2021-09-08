@@ -72,9 +72,7 @@ class MainActivity : DaggerAppCompatActivity() {
         progressBar = findViewById(R.id.progressBar)
         progressBar.visibility = View.VISIBLE
 
-        // TODO: Move Glide to inject
-        val adapter = RecyclerViewAdapter(priceFormatter, percentageFormatter, Glide.with(this)
-        ) {
+        val adapter = RecyclerViewAdapter(priceFormatter, percentageFormatter, Glide.with(this)) {
             mainViewModel.navigateToDetails(it)
         }
         recyclerView.adapter = adapter
@@ -138,21 +136,25 @@ class MainActivity : DaggerAppCompatActivity() {
                 }
             })
     }
-    
-    fun updateFilter(adapter: RecyclerViewAdapter, name: String, companyTypes: Set<StockCompanyType>) {
+
+    fun updateFilter(
+        adapter: RecyclerViewAdapter,
+        name: String,
+        companyTypes: Set<StockCompanyType>,
+    ) {
         adapter.stockInfoListFiltered = if (name.isEmpty() && companyTypes.isEmpty()) {
             Optional.empty()
         } else {
-             Optional.of(adapter.stockInfoList
+            Optional.of(adapter.stockInfoList
                 .filter {
                     var hasNameMatch = name.isEmpty().or(it.name.startsWith(name, true))
                     var hasTypeMatch = companyTypes.isEmpty()
                         .or(it.companyType.intersect(companyTypes).isNotEmpty())
 
                     hasNameMatch.and(hasTypeMatch)
-             })
+                })
         }
-         
+
         adapter.notifyDataSetChanged()
     }
 }

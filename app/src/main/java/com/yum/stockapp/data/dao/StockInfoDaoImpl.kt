@@ -32,7 +32,6 @@ class StockInfoDaoImpl(
             cache[id]?.let { Observable.just(Optional.of(it)) } ?: Observable.empty()
         }.subscribeOn(Schedulers.io()).flatMap { it }
 
-        //TODO : cache invalidation
         return Observable.concat(detailsCache, detailsNetwork).firstOrError().map { it }
             .toObservable()
     }

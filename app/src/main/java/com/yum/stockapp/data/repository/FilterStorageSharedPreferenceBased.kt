@@ -12,7 +12,6 @@ class FilterStorageSharedPreferenceBased(private val sharedPreferences: SharedPr
     }
 
     override fun write(value: StockFilter): Boolean {
-        // TODO shared pref based storage doesn't need to know how to serialize staff
         return sharedPreferences.edit()
             .putString(NAME_KEY, value.name)
             .putStringSet(COMPANY_TYPES, value.companyType.map { it.name }.toSet())

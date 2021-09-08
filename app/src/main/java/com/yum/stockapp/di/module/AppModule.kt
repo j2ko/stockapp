@@ -23,8 +23,9 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
 
-const  val PRICE_KEY = "PRICE_KEY"
-const  val PERCENTAGE_KEY = "PERCENTAGE_KEY"
+const val PRICE_KEY = "PRICE_KEY"
+const val PERCENTAGE_KEY = "PERCENTAGE_KEY"
+const val SHARED_PREF_PATH = "PERCENTAGE_KEY"
 
 @Module
 class AppModule {
@@ -37,8 +38,7 @@ class AppModule {
     @Provides
     @Singleton
     fun provideSharedPreferences(context: Context): SharedPreferences {
-        // TODO: make ROOT Configurable
-        return context.getSharedPreferences("ROOT", MODE_PRIVATE)
+        return context.getSharedPreferences(SHARED_PREF_PATH, MODE_PRIVATE)
     }
 
     @Provides
