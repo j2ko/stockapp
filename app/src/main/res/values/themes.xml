@@ -26,6 +26,9 @@
         <item name="chipMinHeight">24dp</item>
     </style>
 
+    <style name="Widget.App.ChipSearch" parent="Widget.MaterialComponents.Chip.Filter">
+    </style>
+
     <style name="TextAppearance.App.ChipBody" parent="TextAppearance.AppCompat.Small">
         <item name="android:textSize">11sp</item>
     </style>

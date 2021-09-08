@@ -6,7 +6,10 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.yum.stockapp.R
+import com.yum.stockapp.data.model.StockInfo
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
 import java.text.NumberFormat
@@ -45,7 +48,7 @@ class DetailsActivity : DaggerAppCompatActivity() {
         val stockCompanyLogo = findViewById<ImageView>(R.id.detailsLogo)
         val stockCompanyId = findViewById<TextView>(R.id.detailsId)
         val stockCompanyPrice = findViewById<TextView>(R.id.detailsPrice)
-        //val stockCompanyType = findViewById<TextView>(R.id.detailsPriceChange)
+        val stockCompanyType = findViewById<ChipGroup>(R.id.companyTypes)
         val stockCompanyChangeIndicator = findViewById<ImageView>(R.id.detailsIndicator)
         val stockCompanyName = findViewById<TextView>(R.id.detailsName)
         val stockCompanyChangeValue = findViewById<TextView>(R.id.detailsPriceChange)
@@ -54,15 +57,22 @@ class DetailsActivity : DaggerAppCompatActivity() {
         val stockCompanyWebsite = findViewById<TextView>(R.id.detailsWebsite)
 
         stockId.let {
-            detailsViewModel.getStockInfo(it).observe(this, { it ->
-                stockCompanyId.text = it.id
-                stockCompanyName.text = it.name
-                stockCompanyChangeValue.text = it.priceChange.format(percentageFormatter)
-                stockCompanyPrice.text = it.price.format(priceFormatter)
-                stockCompanyChangeIndicator?.setBackgroundResource(if (it.priceChange.isNegative())
+            detailsViewModel.getStockInfo(it).observe(this, { item ->
+                stockCompanyId.text = item.id
+                stockCompanyName.text = item.name
+                stockCompanyChangeValue.text = item.priceChange.format(percentageFormatter)
+                stockCompanyPrice.text = item.price.format(priceFormatter)
+                stockCompanyType.removeAllViews().also {
+                    item.companyType.map { type ->
+                        Chip(this).also {
+                            it.text = type.name
+                        }
+                    }.forEach(stockCompanyType::addView)
+                }
+                stockCompanyChangeIndicator?.setBackgroundResource(if (item.priceChange.isNegative())
                     R.drawable.stock_change_arrow_down else R.drawable.stock_change_arrow_up
                 )
-                it.details.ifPresent { details ->
+                item.details.ifPresent { details ->
                     glide.load(details.imageUrl).into(stockCompanyLogo)
                     stockCompanyAddress.text = details.address
                     stockCompanyWebsite.text = details.website.toString()

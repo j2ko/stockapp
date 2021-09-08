@@ -15,11 +15,15 @@ class MainViewModel @Inject constructor(
     private val filterRepo: FilterRepository,
 ) : ViewModel() {
     private val navigator = SingleLiveEvent<String>()
+    private val filter = MutableLiveData<StockFilter>()
 
     fun getStockInfo(): LiveData<List<StockInfo>> = infoRepo.getStockInfoList().toLiveData()
-    fun getFilter(): LiveData<StockFilter> = filterRepo.getFilter().toLiveData()
-    fun setFilter(name: String, companyTypes: Set<StockCompanyType>) =
-        filterRepo.setFilter(StockFilter(name, companyTypes))
+    fun getCompanyTypes(): LiveData<Set<StockCompanyType>> = infoRepo.getStockInfoList().map {
+        it.flatMap { it.companyType }.toSet()
+    }.toLiveData()
+
+    fun getFilter(): LiveData<StockFilter> = filter
+    fun setFilter(name: String, companyTypes: Set<StockCompanyType>) = filter.postValue(StockFilter(name, companyTypes))
 
     fun navigateToDetails(id: String) {
         navigator.value = id

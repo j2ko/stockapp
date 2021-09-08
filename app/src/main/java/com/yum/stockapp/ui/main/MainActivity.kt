@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.EditText
+import android.widget.ProgressBar
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -18,7 +19,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipDrawable
+import com.google.android.material.chip.ChipGroup
 import com.yum.stockapp.R
+import com.yum.stockapp.data.model.StockCompanyType
 import com.yum.stockapp.data.model.StockFilter
 import com.yum.stockapp.ui.details.DetailsActivity
 import com.yum.stockapp.ui.details.DetailsActivity.Companion.STOCK_ID
@@ -27,6 +32,8 @@ import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.HasActivityInjector
 import dagger.android.support.DaggerAppCompatActivity
+import io.reactivex.Observable.just
+import io.reactivex.rxkotlin.Observables
 import java.text.NumberFormat
 import java.util.*
 import javax.inject.Inject
@@ -35,6 +42,8 @@ import javax.inject.Named
 class MainActivity : DaggerAppCompatActivity() {
     private lateinit var searchTextView: EditText
     private lateinit var recyclerView: RecyclerView
+    private lateinit var progressBar: ProgressBar
+    private lateinit var companyTypesFilter: ChipGroup
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -58,6 +67,8 @@ class MainActivity : DaggerAppCompatActivity() {
 
         recyclerView = findViewById(R.id.stockList)
         searchTextView = findViewById(R.id.searchField)
+        progressBar = findViewById(R.id.progressBar)
+        progressBar.visibility = View.VISIBLE
 
         // TODO: Move Glide to inject
         val adapter = RecyclerViewAdapter(priceFormatter, percentageFormatter, Glide.with(this)
@@ -67,9 +78,40 @@ class MainActivity : DaggerAppCompatActivity() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
+        companyTypesFilter = findViewById(R.id.companyTypesFilter)
+        var chipsCache = emptyList<Chip>()
+        var chipsFilterCache = emptySet<StockCompanyType>()
+        var searchNameCache = ""
+        
+        
+        mainViewModel.getCompanyTypes().observe(this, { compnentTypes ->
+            companyTypesFilter.removeAllViews()
+            compnentTypes.mapIndexed { index, type ->
+                Chip(this).also { it ->
+                    it.text = type.name
+                    it.id = index
+                    it.isCheckable = true
+                    it.isChecked = chipsFilterCache.contains(type)
+                    it.setChipDrawable(ChipDrawable.createFromAttributes(this,
+                        null,
+                        0,
+                        R.style.Widget_App_ChipSearch))
+                    it.setOnCheckedChangeListener { _, _ ->
+                        chipsCache.filter { it.isChecked }.map { it.text.toString() }
+                            .map { StockCompanyType(it) }.toSet().let {
+                                mainViewModel.setFilter(searchNameCache, it)
+                                chipsFilterCache = it
+                                updateFilter(adapter, searchNameCache, chipsFilterCache)
+                            }
+                    }
+                }
+            }.also { chipsCache = it }.forEach(companyTypesFilter::addView)
+        })
+
         mainViewModel.getStockInfo().observe(this, {
             adapter.stockInfoList = it
-            adapter.notifyDataSetChanged()
+            progressBar.visibility = View.GONE
+            updateFilter(adapter, searchNameCache, chipsFilterCache)
         })
 
         val textWatcher = object : TextWatcher {
@@ -77,17 +119,9 @@ class MainActivity : DaggerAppCompatActivity() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                mainViewModel.setFilter(p0.toString(), emptySet())
-
-                if (p0.toString().trim().isNotEmpty()) {
-                    adapter.stockInfoListFiltered = Optional.of(
-                        adapter.stockInfoList
-                            .filter{ it.name.startsWith(p0.toString(), true) })
-
-                } else {
-                    adapter.stockInfoListFiltered = Optional.empty()
-                }
-                adapter.notifyDataSetChanged()
+                searchNameCache = p0.toString().trim()
+                mainViewModel.setFilter(searchNameCache, chipsFilterCache)
+                updateFilter(adapter, searchNameCache, chipsFilterCache)
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -96,18 +130,43 @@ class MainActivity : DaggerAppCompatActivity() {
 
         searchTextView.addTextChangedListener(textWatcher)
 
-        mainViewModel.getFilter().observe(this, {
-            if (!searchTextView.text.equals(it.name)) {
-                searchTextView.setText(it.name)
-            }
-        })
+        mainViewModel.getFilter().observe(this,
+            {
+                if (searchNameCache != it.name) {
+                    searchNameCache = it.name
+                    searchTextView.setText(it.name)
+                }
+                if (chipsFilterCache != it.companyType) {
+                    chipsFilterCache = it.companyType
+                }
 
-        mainViewModel.naviageDetailsEvent().observe(this, {
-            it?.let {
-                val intent = Intent(this, DetailsActivity::class.java)
-                intent.putExtra(STOCK_ID, it)
-                startActivity(intent)
+                updateFilter(adapter, searchNameCache, chipsFilterCache)
+            })
+
+        mainViewModel.naviageDetailsEvent().observe(this,
+            {
+                it?.let {
+                    val intent = Intent(this, DetailsActivity::class.java)
+                    intent.putExtra(STOCK_ID, it)
+                    startActivity(intent)
+                }
+            })
+    }
+    
+    fun updateFilter(adapter: RecyclerViewAdapter, name: String, companyTypes: Set<StockCompanyType>) {
+        var filteredData = adapter.stockInfoList
+            .filter {
+                var hasName = name.isEmpty().or(it.name.startsWith(name, true))
+                var hasType = companyTypes.isEmpty().or(it.companyType.intersect(companyTypes).isNotEmpty())
+
+                hasName.and(hasType)
             }
-        })
+
+        adapter.stockInfoListFiltered = if (filteredData.isNotEmpty()) {
+            Optional.of(filteredData)
+        } else {
+            Optional.empty()
+        }
+        adapter.notifyDataSetChanged()
     }
 }

@@ -26,7 +26,19 @@
             android:scaleType="fitXY"
             tools:srcCompat="@tools:sample/avatars" />
     </FrameLayout>
-
+    <FrameLayout
+        android:id="@+id/companyTypesContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/companyLogoContainer">
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/companyTypes"
+            android:minHeight="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
     <TextView
         android:id="@+id/detailsPrice"
         android:layout_width="wrap_content"
@@ -82,8 +94,8 @@
         android:textSize="26sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/detailsName"
-        app:layout_constraintStart_toStartOf="@+id/companyLogoContainer"
-        app:layout_constraintTop_toBottomOf="@+id/companyLogoContainer"
+        app:layout_constraintStart_toStartOf="@+id/companyTypesContainer"
+        app:layout_constraintTop_toBottomOf="@+id/companyTypesContainer"
         tools:text="AAPL" />
 
     <TextView
@@ -93,7 +105,7 @@
         android:paddingLeft="5dp"
         android:textSize="26sp"
         app:layout_constraintStart_toEndOf="@+id/detailsId"
-        app:layout_constraintTop_toBottomOf="@+id/companyLogoContainer"
+        app:layout_constraintTop_toBottomOf="@+id/companyTypesContainer"
         tools:text="Some company name" />
 
     <androidx.appcompat.widget.AppCompatTextView

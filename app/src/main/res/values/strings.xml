@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Stock App</string>
+    <string name="search_through_company_names">Search through company names</string>
 </resources>

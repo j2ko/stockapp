@@ -53,13 +53,7 @@ class StockInfoDaoImpl(
                 .just(it)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .doOnNext {
-                    Log.e("TAG", "received   $it")
-                }
                 .concatMapIterable { it }
-                .doOnNext {
-                    Log.e("TAG", "handle   $it")
-                }
                 .map {
                     Observable.zip(
                         Observable.just(it),
@@ -73,11 +67,7 @@ class StockInfoDaoImpl(
         }
         .subscribe(centrallistener)
 
-    override fun getStockInfo(): Flowable<List<StockInfo>> {
-        return centrallistener.subscribeOn(Schedulers.io()).doOnNext {
-            Log.e("TAG", "So we are still emitting")
-        }
-    }
+    override fun getStockInfo(): Flowable<List<StockInfo>> = centrallistener.subscribeOn(Schedulers.io())
 
     private fun createStockInfo(
         entry: StockTickerEntry,

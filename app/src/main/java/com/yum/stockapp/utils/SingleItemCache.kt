@@ -1,4 +1,5 @@
 package com.yum.stockapp.utils
+
 //TODO : optimize code
 class SingleItemCache<T> : Cache<T> {
     private val internalCache = mutableMapOf<String, T>()
@@ -11,7 +12,9 @@ class SingleItemCache<T> : Cache<T> {
     }
 
     override fun putAndGet(key: String, newValue: T): T {
-        return internalCache[key] ?: newValue.apply { internalCache[key] = newValue }
+        var oldItem = internalCache[key]
+        internalCache[key] = newValue
+        return oldItem ?: newValue
     }
 
     override fun remove(key: String): T? {

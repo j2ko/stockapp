@@ -18,11 +18,11 @@ data class StockPriceDiff(
     }
 
     companion object {
-        fun percents(left: StockPrice, right: StockPrice): StockPriceDiff {
+        fun percents(newPrice: StockPrice, oldPrice: StockPrice): StockPriceDiff {
             return StockPriceDiff(
-                right.value
-                    .subtract(left.value)
-                    .divide(right.value, 6, RoundingMode.HALF_UP)
+                newPrice.value
+                    .subtract(oldPrice.value)
+                    .divide(newPrice.value, 6, RoundingMode.HALF_UP)
             )
         }
     }
