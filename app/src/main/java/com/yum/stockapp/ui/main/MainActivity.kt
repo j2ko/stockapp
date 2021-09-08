@@ -80,18 +80,14 @@ class MainActivity : DaggerAppCompatActivity() {
 
         companyTypesFilter = findViewById(R.id.companyTypesFilter)
         var chipsCache = emptyList<Chip>()
-        var chipsFilterCache = emptySet<StockCompanyType>()
-        var searchNameCache = ""
-        
-        
-        mainViewModel.getCompanyTypes().observe(this, { compnentTypes ->
+        mainViewModel.getFilterCompanyTypes().observe(this, { compnentTypes ->
             companyTypesFilter.removeAllViews()
             compnentTypes.mapIndexed { index, type ->
                 Chip(this).also { it ->
-                    it.text = type.name
+                    it.text = type.first.name
                     it.id = index
                     it.isCheckable = true
-                    it.isChecked = chipsFilterCache.contains(type)
+                    it.isChecked = type.second
                     it.setChipDrawable(ChipDrawable.createFromAttributes(this,
                         null,
                         0,
@@ -99,9 +95,7 @@ class MainActivity : DaggerAppCompatActivity() {
                     it.setOnCheckedChangeListener { _, _ ->
                         chipsCache.filter { it.isChecked }.map { it.text.toString() }
                             .map { StockCompanyType(it) }.toSet().let {
-                                mainViewModel.setFilter(searchNameCache, it)
-                                chipsFilterCache = it
-                                updateFilter(adapter, searchNameCache, chipsFilterCache)
+                                mainViewModel.setFilterCompanyType(it)
                             }
                     }
                 }
@@ -111,7 +105,7 @@ class MainActivity : DaggerAppCompatActivity() {
         mainViewModel.getStockInfo().observe(this, {
             adapter.stockInfoList = it
             progressBar.visibility = View.GONE
-            updateFilter(adapter, searchNameCache, chipsFilterCache)
+            mainViewModel.refreshFilter()
         })
 
         val textWatcher = object : TextWatcher {
@@ -119,9 +113,7 @@ class MainActivity : DaggerAppCompatActivity() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                searchNameCache = p0.toString().trim()
-                mainViewModel.setFilter(searchNameCache, chipsFilterCache)
-                updateFilter(adapter, searchNameCache, chipsFilterCache)
+                mainViewModel.setFilterName(p0.toString().trim())
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -132,15 +124,7 @@ class MainActivity : DaggerAppCompatActivity() {
 
         mainViewModel.getFilter().observe(this,
             {
-                if (searchNameCache != it.name) {
-                    searchNameCache = it.name
-                    searchTextView.setText(it.name)
-                }
-                if (chipsFilterCache != it.companyType) {
-                    chipsFilterCache = it.companyType
-                }
-
-                updateFilter(adapter, searchNameCache, chipsFilterCache)
+                updateFilter(adapter, it.name, it.companyType)
             })
 
         mainViewModel.naviageDetailsEvent().observe(this,
@@ -154,19 +138,19 @@ class MainActivity : DaggerAppCompatActivity() {
     }
     
     fun updateFilter(adapter: RecyclerViewAdapter, name: String, companyTypes: Set<StockCompanyType>) {
-        var filteredData = adapter.stockInfoList
-            .filter {
-                var hasName = name.isEmpty().or(it.name.startsWith(name, true))
-                var hasType = companyTypes.isEmpty().or(it.companyType.intersect(companyTypes).isNotEmpty())
-
-                hasName.and(hasType)
-            }
-
-        adapter.stockInfoListFiltered = if (filteredData.isNotEmpty()) {
-            Optional.of(filteredData)
-        } else {
+        adapter.stockInfoListFiltered = if (name.isEmpty() && companyTypes.isEmpty()) {
             Optional.empty()
+        } else {
+             Optional.of(adapter.stockInfoList
+                .filter {
+                    var hasNameMatch = name.isEmpty().or(it.name.startsWith(name, true))
+                    var hasTypeMatch = companyTypes.isEmpty()
+                        .or(it.companyType.intersect(companyTypes).isNotEmpty())
+
+                    hasNameMatch.and(hasTypeMatch)
+             })
         }
+         
         adapter.notifyDataSetChanged()
     }
 }

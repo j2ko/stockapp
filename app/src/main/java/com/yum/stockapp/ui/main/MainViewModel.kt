@@ -8,6 +8,8 @@ import com.yum.stockapp.data.repository.FilterRepository
 import com.yum.stockapp.data.repository.StockInfoRepository
 import com.yum.stockapp.utils.SingleLiveEvent
 import com.yum.stockapp.utils.toLiveData
+import io.reactivex.Observable
+import io.reactivex.rxkotlin.mergeAllSingles
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
@@ -16,17 +18,34 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
     private val navigator = SingleLiveEvent<String>()
     private val filter = MutableLiveData<StockFilter>()
+    private var searchByName = ""
+    private var searchByType = emptySet<StockCompanyType>()
 
     fun getStockInfo(): LiveData<List<StockInfo>> = infoRepo.getStockInfoList().toLiveData()
-    fun getCompanyTypes(): LiveData<Set<StockCompanyType>> = infoRepo.getStockInfoList().map {
-        it.flatMap { it.companyType }.toSet()
-    }.toLiveData()
+    fun getFilterCompanyTypes(): LiveData<List<Pair<StockCompanyType, Boolean>>> = infoRepo
+        .getStockInfoList()
+        .map {
+            it.flatMap { it.companyType }.toSet().map { Pair(it, searchByType.contains(it)) }
+        }.toLiveData()
 
     fun getFilter(): LiveData<StockFilter> = filter
-    fun setFilter(name: String, companyTypes: Set<StockCompanyType>) = filter.postValue(StockFilter(name, companyTypes))
+
+    fun setFilterName(name: String) {
+        searchByName = name
+        filter.postValue(StockFilter(searchByName, searchByType))
+    }
+
+    fun setFilterCompanyType(companyTypes: Set<StockCompanyType>) {
+        searchByType = companyTypes
+        filter.postValue(StockFilter(searchByName, searchByType))
+    }
 
     fun navigateToDetails(id: String) {
         navigator.value = id
+    }
+
+    fun refreshFilter() {
+        filter.postValue(StockFilter(searchByName, searchByType))
     }
 
     fun naviageDetailsEvent() = navigator

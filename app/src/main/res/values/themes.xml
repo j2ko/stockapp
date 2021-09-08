@@ -24,9 +24,13 @@
         <item name="checkedIconVisible">false</item>
         <item name="shapeAppearanceOverlay">@null</item>
         <item name="chipMinHeight">24dp</item>
+
     </style>
 
     <style name="Widget.App.ChipSearch" parent="Widget.MaterialComponents.Chip.Filter">
+        <item name="shapeAppearance">@style/ShapeAppearance.App.SmallComponent</item>
+        <item name="chipStartPadding">2dp</item>
+        <item name="chipSpacingHorizontal">2dp</item>
     </style>
 
     <style name="TextAppearance.App.ChipBody" parent="TextAppearance.AppCompat.Small">
